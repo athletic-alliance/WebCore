@@ -1,11 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {authenticate} from './services/auth.service';
 
 function App() {
   return (
     <div className="App">
-      <div>Span</div>
+      <div onClick={() => authenticate({username: 'johannes', password: '@Wsehxkxwj92'})} >Span</div>
     </div>
   );
 }
