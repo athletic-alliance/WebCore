@@ -44,7 +44,7 @@ export const Navbar = () => {
                                         <NavLink
                                             to={item.href}
                                             className={'text-white'}
-                                            // key={item.name}
+                                            key={item.name}
                                             // href={item.href}
                                             // className={classNames(
                                             //     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',

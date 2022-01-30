@@ -22,10 +22,9 @@ function App() {
             <HashRouter>
                 <Routes>
                     <Route>
-                        <Route path="*" element={<PageNotFoundView/>}/>
                         <Route path="login" element={<LoginView/>}/>
                         <Route element={<SignedInLayout/>}>
-                            <Route path="/" element={<Navigate replace to="/dashboard"/>}/>
+                            <Route index element={<Navigate replace to="/dashboard"/>}/>
                             <Route
                                 path="dashboard"
                                 element={
@@ -33,19 +32,19 @@ function App() {
                                 }
                             />
                             <Route
-                                path="plan"
+                                path="plan/*"
                                 element={
                                     <PlanView/>
                                 }
                             />
                             <Route
-                                path="my-box"
+                                path="my-box/*"
                                 element={
                                     <MyBoxView/>
                                 }
                             />
                             <Route
-                                path="my-plan"
+                                path="my-plan/*"
                                 element={
                                     <MyPlanView/>
                                 }
@@ -57,6 +56,7 @@ function App() {
                                 }
                             />
                         </Route>
+                        <Route path="*" element={<PageNotFoundView/>}/>
                     </Route>
                 </Routes>
             </HashRouter>
