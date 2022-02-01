@@ -218,20 +218,3 @@ export const WorkoutList = ({workouts}: WorkoutListProps) => {
         </div>
     </>);
 }
-
-type WorkoutListItemProps = {
-    workout: WorkoutDto
-    deleteClicked: (id: number) => void
-}
-
-export const WorkoutListItem = ({workout, deleteClicked}: WorkoutListItemProps) => {
-    return (<div className="py-1 px-2 border border-gray-300 w-full rounded-sm my-1 text-sm flex justify-between">
-        <div>
-            <span className={'block font-bold'}>{workout.name}</span>
-            <span className={'block'}>{workout.type}</span>
-        </div>
-        <div className="self-center" onClick={() => deleteClicked(workout.id)}>
-            Löschen
-        </div>
-    </div>)
-}
