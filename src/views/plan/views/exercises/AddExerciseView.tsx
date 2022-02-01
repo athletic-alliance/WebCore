@@ -1,28 +1,27 @@
 import React from 'react'
 import {AddExerciseForm} from './components/AddExerciseForm';
 import {useMutation} from 'react-query';
-import {createExercise} from '../../../../adapter/exercise.adapter';
+import {createExercise} from '../../../../adapter';
 import {CreateExerciseDto} from '../../../../dtos/exercises/create-exercise.dto';
 import {notifyError, notifySuccess} from '../../../../notifications';
+import {useNavigate} from 'react-router';
 
-type AddExerciseViewProps = {
-    formSubmitted: (values: any) => void;
-}
-
-export const AddExerciseView = ({formSubmitted}: AddExerciseViewProps) => {
+export const AddExerciseView = () => {
+    const navigation = useNavigate()
 
     const createExerciseMutation = useMutation((createExerciseDto: CreateExerciseDto) => createExercise(createExerciseDto),
         {
             onSuccess: () => {
-                notifySuccess('Übung erstellt');
+                notifySuccess('Übung erstellt')
             },
             onError: () => {
-                notifyError('Übung konnte nicht erstellt werden');
+                notifyError('Übung konnte nicht erstellt werden')
             },
         });
 
     const saveExercise = (exerciseValues: CreateExerciseDto) => {
-        createExerciseMutation.mutate(exerciseValues);
+        createExerciseMutation.mutate(exerciseValues)
+        navigation('/plan/exercise/all')
     }
 
     return (<AddExerciseForm formSubmitted={saveExercise}/>)

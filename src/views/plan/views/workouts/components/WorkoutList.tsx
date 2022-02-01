@@ -1,52 +1,37 @@
 import React, {useState} from 'react'
-import {ExerciseDto} from '../../../../../dtos/exercises/exercise.dto';
+import {WorkoutDto} from '../../../../../dtos/workout/workout.dto';
 import {useMutation, useQueryClient} from 'react-query';
-import {deleteExercise} from '../../../../../adapter';
 import {notifyError, notifySuccess} from '../../../../../notifications';
+import {deleteWorkout} from '../../../../../adapter/workout.adapter';
+import {usePagination, useTable} from 'react-table';
 import {ConfirmationModal} from '../../../../../shared/components/modals/ConfirmationModal';
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/outline';
-import {usePagination, useTable} from 'react-table';
-import clsx from 'clsx';
 
-type ExerciseListProps = {
-    exercises: ExerciseDto[]
+type WorkoutListProps = {
+    workouts: WorkoutDto[]
 }
 
-export const ExerciseList = ({exercises}: ExerciseListProps) => {
+export const WorkoutList = ({workouts}: WorkoutListProps) => {
     const queryClient = useQueryClient()
 
     const [open, setOpen] = useState<boolean>(false)
-    const [exerciseId, setExerciseId] = useState<number>(0)
+    const [workoutId, setWorkoutId] = useState<number>(0)
 
-    const deleteMutation = useMutation((id: number) => deleteExercise(id),
+    const deleteMutation = useMutation((id: number) => deleteWorkout(id),
         {
             onSuccess: () => {
-                notifySuccess('Übung gelöscht')
-                queryClient.invalidateQueries('fetchExercises')
+                notifySuccess('Workout gelöscht')
+                queryClient.invalidateQueries('fetchWorkout')
             },
             onError: () => {
-                notifyError('Übung konnte nicht gelöscht werden')
+                notifyError('Workout konnte nicht gelöscht werden')
             },
         });
-
-    const openCloseDialog = (exerciseId: number) => {
-        setExerciseId(exerciseId)
-        setOpen(true)
-    }
-
-    const onCloseDialogConfirm = () => {
-        setOpen(false)
-        deleteMutation.mutate(exerciseId)
-    }
-
-    const onCloseDialogCancel = () => {
-        setOpen(false)
-    }
 
     const columns = React.useMemo(
         () => [
             {
-                Header: 'Übungen',
+                Header: 'Workouts',
                 columns: [
                     {
                         Header: 'Name',
@@ -61,7 +46,6 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
         ],
         []
     );
-
 
     const {
         getTableProps,
@@ -81,26 +65,35 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
     } = useTable(
         {
             columns,
-            data: exercises,
+            data: workouts,
             initialState: {pageIndex: 0},
         },
         usePagination
     )
 
-    const getStyle = (index: number) => {
-        return clsx({
-            'relative inline-flex items-center px-4 py-2 border text-sm font-medium': true,
-            'z-10 bg-blue-50 border-blue-500 text-blue-600': pageIndex === index,
-            'border-gray-300 text-gray-500 hover:bg-gray-50': pageIndex !== index,
-        });
-    };
+    const openCloseDialog = (id: number) => {
+        setWorkoutId(id)
+        setOpen(true)
+    }
+
+    const onCloseDialogConfirm = () => {
+        setOpen(false)
+        deleteMutation.mutate(workoutId)
+    }
+
+    const onCloseDialogCancel = () => {
+        setOpen(false)
+    }
 
     return (<>
         <ConfirmationModal title={'Wirklich löschen'} text={'Übung wirklich löschen'} isOpen={open}
                            onCancel={onCloseDialogCancel} onConfirm={onCloseDialogConfirm}/>
         <div className="w-full">
+            {/*{workouts.map((workout: WorkoutDto, index: number) => (*/}
+            {/*    <WorkoutListItem deleteClicked={() => openCloseDialog(workout.id)} key={index}*/}
+            {/*                     workout={workout}/>))}*/}
             <div className="flex flex-col">
-                <div className="overflow-x-auto">
+                <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                             <table {...getTableProps()} className="min-w-full divide-y divide-gray-200">
@@ -132,7 +125,11 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                     </div>
                 </div>
             </div>
-            <div className="bg-white px-4 py-3 flex items-center justify-between sm:px-8">
+            {/*
+        Pagination can be built however you'd like.
+        This is just a very basic UI implementation:
+      */}
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                 <div className="flex-1 flex justify-between sm:hidden">
                     <a
                         href="#"
@@ -152,7 +149,7 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                         <p className="text-sm text-gray-700">
                             Showing <span className="font-medium">1</span> to <span
                             className="font-medium">10</span> of{' '}
-                            <span className="font-medium">{exercises.length}</span> results
+                            <span className="font-medium">97</span> results
                         </p>
                     </div>
                     <div>
@@ -165,15 +162,48 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                                 <span className="sr-only">Previous</span>
                                 <ChevronLeftIcon className="h-5 w-5" aria-hidden="true"/>
                             </span>
-                            {Array.from(Array(pageCount), (e, i) => (
-                                <a
-                                    href="#"
-                                    aria-current="page"
-                                    className={getStyle(i)}
-                                >
-                                    {i + 1}
-                                </a>
-                            ))}
+                            {/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
+                            <a
+                                href="#"
+                                aria-current="page"
+                                className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                            >
+                                1
+                            </a>
+                            <a
+                                href="#"
+                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                            >
+                                2
+                            </a>
+                            <a
+                                href="#"
+                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
+                            >
+                                3
+                            </a>
+                            <span
+                                className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+              ...
+            </span>
+                            <a
+                                href="#"
+                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
+                            >
+                                8
+                            </a>
+                            <a
+                                href="#"
+                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                            >
+                                9
+                            </a>
+                            <a
+                                href="#"
+                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                            >
+                                10
+                            </a>
                             <span
                                 onClick={() => nextPage()}
                                 className="relative inline-flex cursor-pointer items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
@@ -189,18 +219,18 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
     </>);
 }
 
-type ExerciseListItemProps = {
-    exercise: ExerciseDto
+type WorkoutListItemProps = {
+    workout: WorkoutDto
     deleteClicked: (id: number) => void
 }
 
-export const ExerciseListItem = ({exercise, deleteClicked}: ExerciseListItemProps) => {
+export const WorkoutListItem = ({workout, deleteClicked}: WorkoutListItemProps) => {
     return (<div className="py-1 px-2 border border-gray-300 w-full rounded-sm my-1 text-sm flex justify-between">
         <div>
-            <span className={'block font-bold'}>{exercise.name}</span>
-            <span className={'block'}>{exercise.type}</span>
+            <span className={'block font-bold'}>{workout.name}</span>
+            <span className={'block'}>{workout.type}</span>
         </div>
-        <div className="self-center" onClick={() => deleteClicked(exercise.id)}>
+        <div className="self-center" onClick={() => deleteClicked(workout.id)}>
             Löschen
         </div>
     </div>)

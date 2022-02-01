@@ -4,6 +4,8 @@ import {AddExerciseView} from './views/exercises/AddExerciseView';
 import {ExerciseOverviewView} from './views/exercises/ExerciseOverviewView';
 import {OrganizeDashboardView} from './views/OrganizeDashboardView';
 import {NavLink} from 'react-router-dom';
+import {AllWorkoutsViews} from './views/workouts/AllWorkoutsViews';
+import {AddWorkoutsViews} from './views/workouts/AddWorkoutView';
 
 export const PlanView = () => {
     return (<div className={'flex'}>
@@ -11,10 +13,10 @@ export const PlanView = () => {
             <Routes>
                 <Route element={<OrganizeLayout/>}>
                     <Route index element={<OrganizeDashboardView/>}/>
-                    <Route path="all" element={<ExerciseOverviewView/>}/>
-                    <Route path="add" element={<AddExerciseView formSubmitted={(values: any) => {
-                        console.log(values)
-                    }}/>}/>
+                    <Route path="workout/all" element={<AllWorkoutsViews/>}/>
+                    <Route path="workout/add" element={<AddWorkoutsViews/>}/>
+                    <Route path="exercise/all" element={<ExerciseOverviewView/>}/>
+                    <Route path="exercise/add" element={<AddExerciseView/>}/>
                 </Route>
             </Routes>
         </div>
@@ -27,17 +29,30 @@ export const OrganizeLayout = () => {
             <div className={'flex'}>
                 <div>
                     <div>Plan</div>
-                    <div>Workout</div>
                     <div>
                         <NavLink
-                            to={'all'}
+                            to={'workout/all'}
+                            key={'allWorkouts'}>
+                            Alle Workouts
+                        </NavLink>
+                    </div>
+                    <div>
+                        <NavLink
+                            to={'workout/add'}
+                            key={'addWorkout'}>
+                            Workout erstellen
+                        </NavLink>
+                    </div>
+                    <div>
+                        <NavLink
+                            to={'exercise/all'}
                             key={'allExercises'}>
                             Alle Übungen
                         </NavLink>
                     </div>
                     <div>
                         <NavLink
-                            to={'add'}
+                            to={'exercise/add'}
                             key={'addExercise'}>
                             Übung hinzufügen
                         </NavLink>
