@@ -5,11 +5,29 @@ import {deleteExercise} from '../../../../../adapter';
 import {notifyError, notifySuccess} from '../../../../../notifications';
 import {ConfirmationModal} from '../../../../../shared/components/modals/ConfirmationModal';
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/outline';
-import {usePagination, useTable} from 'react-table';
+import {useFilters, useGlobalFilter, usePagination, useTable} from 'react-table';
 import clsx from 'clsx';
 
 type ExerciseListProps = {
     exercises: ExerciseDto[]
+}
+
+function DefaultColumnFilter({
+                                 // @ts-ignore
+                                 column: {filterValue, preFilteredRows, setFilter},
+                             }) {
+    const count = preFilteredRows.length
+
+    return (
+        <input
+            className="border border-gray-300 py-1 px-2 my-2 block w-full sm:text-sm border-gray-300 rounded-md"
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+            }}
+            placeholder={`Alle durchsuchen ...`}
+        />
+    )
 }
 
 export const ExerciseList = ({exercises}: ExerciseListProps) => {
@@ -62,12 +80,22 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
         []
     );
 
+    const defaultColumn = React.useMemo(
+        () => ({
+            // Let's set up our default Filter UI
+            Filter: DefaultColumnFilter,
+        }),
+        []
+    )
 
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
         prepareRow,
+        visibleColumns,
+        preGlobalFilteredRows,
+        setGlobalFilter,
         page,
         canPreviousPage,
         canNextPage,
@@ -83,13 +111,16 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
             columns,
             data: exercises,
             initialState: {pageIndex: 0},
+            defaultColumn, // Be sure to pass the defaultColumn option
         },
+        useFilters, // useFilters!
+        useGlobalFilter, // useGlobalFilter!
         usePagination
     )
 
     const getStyle = (index: number) => {
         return clsx({
-            'relative inline-flex items-center px-4 py-2 border text-sm font-medium': true,
+            'relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:cursor-pointer': true,
             'z-10 bg-blue-50 border-blue-500 text-blue-600': pageIndex === index,
             'border-gray-300 text-gray-500 hover:bg-gray-50': pageIndex !== index,
         });
@@ -109,7 +140,10 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                                     <tr {...headerGroup.getHeaderGroupProps()}>
                                         {headerGroup.headers.map(column => (
                                             <th {...column.getHeaderProps()}
-                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{column.render('Header')}</th>
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                {column.render('Header')}
+                                                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                                            </th>
                                         ))}
                                     </tr>
                                 ))}
@@ -121,7 +155,7 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                                         <tr {...row.getRowProps()}>
                                             {row.cells.map(cell => {
                                                 return <td {...cell.getCellProps()}
-                                                           className="px-6 py-4 whitespace-nowrap">{cell.render('Cell')}</td>
+                                                           className="px-6 py-4 whitespace-nowrap text-sm">{cell.render('Cell')}</td>
                                             })}
                                         </tr>
                                     )
@@ -150,9 +184,9 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                 <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                         <p className="text-sm text-gray-700">
-                            Showing <span className="font-medium">1</span> to <span
-                            className="font-medium">10</span> of{' '}
-                            <span className="font-medium">{exercises.length}</span> results
+                            <span className="font-medium">1</span> - <span
+                            className="font-medium">10</span> von{' '}
+                            <span className="font-medium">{exercises.length}</span> Ergebnissen
                         </p>
                     </div>
                     <div>
@@ -166,13 +200,12 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
                                 <ChevronLeftIcon className="h-5 w-5" aria-hidden="true"/>
                             </span>
                             {Array.from(Array(pageCount), (e, i) => (
-                                <a
-                                    href="#"
+                                <span
                                     aria-current="page"
                                     className={getStyle(i)}
                                 >
                                     {i + 1}
-                                </a>
+                                </span>
                             ))}
                             <span
                                 onClick={() => nextPage()}
@@ -187,21 +220,4 @@ export const ExerciseList = ({exercises}: ExerciseListProps) => {
             </div>
         </div>
     </>);
-}
-
-type ExerciseListItemProps = {
-    exercise: ExerciseDto
-    deleteClicked: (id: number) => void
-}
-
-export const ExerciseListItem = ({exercise, deleteClicked}: ExerciseListItemProps) => {
-    return (<div className="py-1 px-2 border border-gray-300 w-full rounded-sm my-1 text-sm flex justify-between">
-        <div>
-            <span className={'block font-bold'}>{exercise.name}</span>
-            <span className={'block'}>{exercise.type}</span>
-        </div>
-        <div className="self-center" onClick={() => deleteClicked(exercise.id)}>
-            Löschen
-        </div>
-    </div>)
 }

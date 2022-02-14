@@ -23,41 +23,26 @@ export const PlanView = () => {
     </div>)
 }
 
+const navItems = [
+    { name: 'Workouts', to: 'workout/all' },
+    { name: 'Workout erstellen', to:'workout/add' },
+    { name: 'Übungen', to: 'exercise/all' },
+    { name: 'Übungen erstellen', to: 'exercise/add' },
+]
+
 export const OrganizeLayout = () => {
     return (
         <div className={'w-full'}>
             <div className={'flex'}>
-                <div>
-                    <div>Plan</div>
-                    <div>
-                        <NavLink
-                            to={'workout/all'}
-                            key={'allWorkouts'}>
-                            Alle Workouts
-                        </NavLink>
-                    </div>
-                    <div>
-                        <NavLink
-                            to={'workout/add'}
-                            key={'addWorkout'}>
-                            Workout erstellen
-                        </NavLink>
-                    </div>
-                    <div>
-                        <NavLink
-                            to={'exercise/all'}
-                            key={'allExercises'}>
-                            Alle Übungen
-                        </NavLink>
-                    </div>
-                    <div>
-                        <NavLink
-                            to={'exercise/add'}
-                            key={'addExercise'}>
-                            Übung hinzufügen
-                        </NavLink>
-                    </div>
-                </div>
+                <ul className="text-sm font-semibold text-gray-700 px-2 py-3">
+                    {navItems.map((item: any, index: number) =>
+                        (<li key={index} className="block px-2 py-2 border border-transparent whitespace-nowrap hover:text-blue-500 hover:border hover:border-gray-300 rounded rounded-sm cursor-pointer">
+                            <NavLink to={item.to} key={index}>
+                                {item.name}
+                            </NavLink>
+                        </li>)
+                    )}
+                </ul>
                 <Outlet/>
             </div>
         </div>

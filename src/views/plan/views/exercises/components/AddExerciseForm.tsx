@@ -26,13 +26,14 @@ export const AddExerciseForm = ({formSubmitted}: AddExerciseFormProps) => {
             }}
         >
             {({errors, touched, isValid, dirty}) => (
-                <>
-                    <Form>
-                        <div>
+                <div className="w-full">
+                    <Form className={'w-full'}>
+                        <div className={'w-full'}>
                             <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700">
                                 Name
                             </label>
                             <Field
+                                className="w-full border border-gray-300 rounded rounded-md"
                                 id="name"
                                 name="name"
                                 type="name"
@@ -42,7 +43,7 @@ export const AddExerciseForm = ({formSubmitted}: AddExerciseFormProps) => {
                             <label htmlFor="exerciseType" className="mb-1 mt-3 block text-sm font-medium text-gray-700">
                                 Typ
                             </label>
-                            <Field name="exerciseType" as="select">
+                            <Field name="exerciseType" as="select" className="border border-gray-300 rounded rounded-md">
                                 {Object.keys(ExerciseType).filter((key: any) => !isNaN(Number(ExerciseType[key]))).map((key) => (
                                     <option key={key} value={key}>
                                         {key}
@@ -57,7 +58,7 @@ export const AddExerciseForm = ({formSubmitted}: AddExerciseFormProps) => {
                             Speichern
                         </button>
                     </Form>
-                </>
+                </div>
             )}
         </Formik>)
 }
