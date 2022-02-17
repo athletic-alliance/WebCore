@@ -1,6 +1,6 @@
-import {ExerciseType} from '../../enums/exercise-type.enum';
+import { ExerciseType } from "../../enums/exercise-type.enum";
 
 export interface CreateExerciseDto {
-    name: string
-    exerciseType: ExerciseType
+  name: string;
+  exerciseType: ExerciseType;
 }

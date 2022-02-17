@@ -1,5 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export const MyPlanView = () => {
-    return (<div>MyPlan</div>)
-}
+  return <div>MyPlan</div>;
+};

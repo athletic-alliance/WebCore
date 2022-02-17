@@ -1,1 +1,1 @@
-export * from './exercise.adapter';
+export * from "./exercise.adapter";

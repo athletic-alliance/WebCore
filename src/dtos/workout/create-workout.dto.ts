@@ -1,7 +1,7 @@
 export interface CreateWorkoutDto {
-    name: string;
-    description: string;
-    type: number;
-    timeLimit: number;
-    exercises: [];
+  name: string;
+  description: string;
+  type: number;
+  timeLimit: number;
+  exercises: [];
 }

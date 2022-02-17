@@ -1,29 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {QueryClient, QueryClientProvider} from 'react-query';
-import {ReactQueryDevtools} from 'react-query/devtools';
-import {Toaster} from 'react-hot-toast';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            retry: false,
-        },
+  defaultOptions: {
+    queries: {
+      retry: false,
     },
+  },
 });
 
 ReactDOM.render(
-    <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <Toaster/>
-            <App/>
-            <ReactQueryDevtools initialIsOpen={false}/>
-        </QueryClientProvider>
-    </React.StrictMode>,
-    document.getElementById('root')
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <Toaster />
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
