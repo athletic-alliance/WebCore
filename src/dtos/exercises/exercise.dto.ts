@@ -5,3 +5,9 @@ export interface ExerciseDto {
     name: string
     type: ExerciseType
 }
+
+export interface ExerciseDetailsDto {
+    weight: number;
+    distance: number;
+    repetitions: number;
+}

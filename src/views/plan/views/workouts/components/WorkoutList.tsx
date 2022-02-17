@@ -3,9 +3,11 @@ import {WorkoutDto} from '../../../../../dtos/workout/workout.dto';
 import {useMutation, useQueryClient} from 'react-query';
 import {notifyError, notifySuccess} from '../../../../../notifications';
 import {deleteWorkout} from '../../../../../adapter/workout.adapter';
-import {usePagination, useTable} from 'react-table';
+import {Row, usePagination, useTable} from 'react-table';
 import {ConfirmationModal} from '../../../../../shared/components/modals/ConfirmationModal';
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/outline';
+import clsx from 'clsx';
+import {generatePath, useNavigate} from 'react-router';
 
 type WorkoutListProps = {
     workouts: WorkoutDto[]
@@ -13,6 +15,7 @@ type WorkoutListProps = {
 
 export const WorkoutList = ({workouts}: WorkoutListProps) => {
     const queryClient = useQueryClient()
+    const navigate = useNavigate();
 
     const [open, setOpen] = useState<boolean>(false)
     const [workoutId, setWorkoutId] = useState<number>(0)
@@ -33,6 +36,10 @@ export const WorkoutList = ({workouts}: WorkoutListProps) => {
             {
                 Header: 'Workouts',
                 columns: [
+                    {
+                        Header: 'Id',
+                        accessor: 'id',
+                    },
                     {
                         Header: 'Name',
                         accessor: 'name',
@@ -71,11 +78,6 @@ export const WorkoutList = ({workouts}: WorkoutListProps) => {
         usePagination
     )
 
-    const openCloseDialog = (id: number) => {
-        setWorkoutId(id)
-        setOpen(true)
-    }
-
     const onCloseDialogConfirm = () => {
         setOpen(false)
         deleteMutation.mutate(workoutId)
@@ -85,13 +87,14 @@ export const WorkoutList = ({workouts}: WorkoutListProps) => {
         setOpen(false)
     }
 
+    const viewWorkout = (workout: Row<WorkoutDto>) => {
+        navigate(generatePath('/plan/workout/:id', { id: workout.values.id}));
+    }
+
     return (<>
         <ConfirmationModal title={'Wirklich löschen'} text={'Übung wirklich löschen'} isOpen={open}
                            onCancel={onCloseDialogCancel} onConfirm={onCloseDialogConfirm}/>
         <div className="w-full">
-            {/*{workouts.map((workout: WorkoutDto, index: number) => (*/}
-            {/*    <WorkoutListItem deleteClicked={() => openCloseDialog(workout.id)} key={index}*/}
-            {/*                     workout={workout}/>))}*/}
             <div className="flex flex-col">
                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -108,10 +111,13 @@ export const WorkoutList = ({workouts}: WorkoutListProps) => {
                                 ))}
                                 </thead>
                                 <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
-                                {page.map((row, i) => {
+                                {page.map((row: Row<WorkoutDto>, i) => {
                                     prepareRow(row)
                                     return (
-                                        <tr {...row.getRowProps()}>
+                                        <tr
+                                            className={'cursor-pointer hover:bg-gray-100'}
+                                            onClick={() => viewWorkout(row)}
+                                            {...row.getRowProps()}>
                                             {row.cells.map(cell => {
                                                 return <td {...cell.getCellProps()}
                                                            className="px-6 py-4 whitespace-nowrap">{cell.render('Cell')}</td>
@@ -125,96 +131,85 @@ export const WorkoutList = ({workouts}: WorkoutListProps) => {
                     </div>
                 </div>
             </div>
-            {/*
-        Pagination can be built however you'd like.
-        This is just a very basic UI implementation:
-      */}
-            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div className="flex-1 flex justify-between sm:hidden">
-                    <a
-                        href="#"
-                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                        Previous
-                    </a>
-                    <a
-                        href="#"
-                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                        Next
-                    </a>
+            <Pagination pageIndex={pageIndex} nextClicked={nextPage} previousClicked={previousPage}
+                        goToClicked={gotoPage} pageCount={pageCount} itemCount={workouts.length}/>
+        </div>
+    </>);
+}
+
+type PaginationProps = {
+    pageIndex: number;
+    itemCount: number;
+    pageCount: number;
+    nextClicked: () => void;
+    previousClicked: () => void;
+    goToClicked: (i: number) => void;
+}
+
+const Pagination = ({itemCount, pageCount, pageIndex, nextClicked, previousClicked, goToClicked}: PaginationProps) => {
+
+    const getStyle = (index: number) => {
+        return clsx({
+            'relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:cursor-pointer': true,
+            'z-10 bg-blue-50 border-blue-500 text-blue-600': pageIndex === index,
+            'border-gray-300 text-gray-500 hover:bg-gray-50': pageIndex !== index,
+        });
+    };
+
+    return (
+        <div className="bg-white px-4 py-3 flex items-center justify-between sm:px-8">
+            <div className="flex-1 flex justify-between sm:hidden">
+                <a
+                    href="#"
+                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                >
+                    Previous
+                </a>
+                <a
+                    href="#"
+                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                >
+                    Next
+                </a>
+            </div>
+            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p className="text-sm text-gray-700">
+                        <span className="font-medium">1</span> - <span
+                        className="font-medium">10</span> von{' '}
+                        <span className="font-medium">{itemCount}</span> Ergebnissen
+                    </p>
                 </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p className="text-sm text-gray-700">
-                            Showing <span className="font-medium">1</span> to <span
-                            className="font-medium">10</span> of{' '}
-                            <span className="font-medium">97</span> results
-                        </p>
-                    </div>
-                    <div>
-                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                             aria-label="Pagination">
+                <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                         aria-label="Pagination">
                             <span
-                                onClick={() => previousPage()}
+                                onClick={previousClicked}
                                 className="relative inline-flex cursor-pointer items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                             >
                                 <span className="sr-only">Previous</span>
                                 <ChevronLeftIcon className="h-5 w-5" aria-hidden="true"/>
                             </span>
-                            {/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
-                            <a
-                                href="#"
+                        {Array.from(Array(pageCount), (e, i) => (
+                            <span
+                                key={i}
+                                onClick={() => goToClicked(i)}
                                 aria-current="page"
-                                className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                                className={getStyle(i)}
                             >
-                                1
-                            </a>
-                            <a
-                                href="#"
-                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                            >
-                                2
-                            </a>
-                            <a
-                                href="#"
-                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
-                            >
-                                3
-                            </a>
-                            <span
-                                className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-              ...
-            </span>
-                            <a
-                                href="#"
-                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
-                            >
-                                8
-                            </a>
-                            <a
-                                href="#"
-                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                            >
-                                9
-                            </a>
-                            <a
-                                href="#"
-                                className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                            >
-                                10
-                            </a>
-                            <span
-                                onClick={() => nextPage()}
-                                className="relative inline-flex cursor-pointer items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                            >
+                                    {i + 1}
+                                </span>
+                        ))}
+                        <span
+                            onClick={nextClicked}
+                            className="relative inline-flex cursor-pointer items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        >
                                 <span className="sr-only">Next</span>
                                 <ChevronRightIcon className="h-5 w-5" aria-hidden="true"/>
                             </span>
-                        </nav>
-                    </div>
+                    </nav>
                 </div>
             </div>
         </div>
-    </>);
+    );
 }

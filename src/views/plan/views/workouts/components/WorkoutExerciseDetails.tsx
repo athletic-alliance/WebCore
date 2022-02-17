@@ -1,6 +1,5 @@
 import React from 'react';
 import {ExerciseType} from '../../../../../enums/exercise-type.enum';
-import {WorkoutExerciseDetailsInputs} from './WorkoutExerciseDetailsInputs';
 
 export interface WorkoutExerciseDetail {
     exerciseId: number;
@@ -16,13 +15,26 @@ export interface WorkoutExerciseDetail {
 }
 
 type WorkoutExerciseDetailsProps = {
-    details: WorkoutExerciseDetail;
+    exercise: WorkoutExerciseDetail;
 }
 
-export const WorkoutExerciseDetails = (workoutDetails: WorkoutExerciseDetailsProps) => {
+export const WorkoutExerciseDetails = ({
+                                           exercise,
+                                       }: WorkoutExerciseDetailsProps) => {
 
-    return (<div>
-        <div>{workoutDetails.details.name}</div>
-        <WorkoutExerciseDetailsInputs type={workoutDetails.details.type} details={workoutDetails.details}/>
-    </div>);
+    const renderDetails = (exercise: WorkoutExerciseDetail) => {
+
+        switch (+ExerciseType[exercise.type]) {
+            case ExerciseType.None:
+                return (<>{exercise.name}</>)
+            case ExerciseType.Cardio:
+                return (<>{exercise.details.repetitions}m {exercise.name}</>)
+            case ExerciseType.Strength:
+                return (<>{exercise.details.repetitions} {exercise.name} mit {exercise.details.weight} kg</>)
+            case ExerciseType.Bodyweight:
+                return (<>{exercise.details.repetitions} {exercise.name}</>)
+        }
+    }
+
+    return (<div>{renderDetails(exercise)}</div>);
 }

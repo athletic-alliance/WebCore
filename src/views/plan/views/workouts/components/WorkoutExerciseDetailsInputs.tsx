@@ -1,23 +1,35 @@
-import React, {ChangeEvent, ChangeEventHandler} from 'react'
+import React, {ChangeEvent} from 'react'
 
 type WorkoutExerciseDetailsInputProps = {
-    type: any;
-    details: any;
-    onWeightChanged: (value: number) => void;
-    onRepsChanged: (value: number) => void;
-    onDistanceChanged: (value: number) => void;
+    exercise: any;
+    onDetailsChanged: (value: number) => void;
 }
 
 export const WorkoutExerciseDetailsInputs = ({
-                                                 type,
-                                                 details,
-                                                 onWeightChanged,
-                                                 onRepsChanged,
-                                                 onDistanceChanged
+                                                 exercise,
+                                                 onDetailsChanged,
                                              }: WorkoutExerciseDetailsInputProps) => {
 
     const renderNone = () => {
         return <div>none</div>;
+    }
+
+    const onRepsChanged = (e: number) => {
+        const exerciseDetails = {...exercise.details};
+        exerciseDetails.repetitions = e;
+        onDetailsChanged(exerciseDetails);
+    }
+
+    const onWeightChanged = (e: number) => {
+        const exerciseDetails = {...exercise.details};
+        exerciseDetails.weight = e;
+        onDetailsChanged(exerciseDetails);
+    }
+
+    const onDistanceChanged = (e: number) => {
+        const exerciseDetails = {...exercise.details};
+        exerciseDetails.distance = e;
+        onDetailsChanged(exerciseDetails);
     }
 
     const renderBodyweight = () => {
@@ -75,7 +87,24 @@ export const WorkoutExerciseDetailsInputs = ({
     }
 
     const renderCardio = () => {
-        return <div>none</div>;
+        return <div className={'flex'}>
+            <div>
+                <label htmlFor="distance" className="block text-sm font-medium text-gray-700">
+                    Distanz
+                </label>
+                <div className="mt-1 relative rounded-md">
+                    <div>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => onDistanceChanged(+e.target.value)}
+                            type="number"
+                            name="distance"
+                            id="distance"
+                            className="p-1 border border-gray-300 rounded rounded-md focus:outline-none"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>;
     }
 
     const renderInputs = (type: string) => {
@@ -90,5 +119,5 @@ export const WorkoutExerciseDetailsInputs = ({
                 return renderBodyweight();
         }
     }
-    return (<>{renderInputs(type)}</>);
+    return (<>{renderInputs(exercise.type)}</>);
 }

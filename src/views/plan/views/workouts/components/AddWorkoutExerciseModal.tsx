@@ -1,31 +1,158 @@
 import {Dialog, Transition} from '@headlessui/react';
-import React, {Fragment, useRef, useState} from 'react';
+import React, {ChangeEvent, Fragment, useRef, useState} from 'react';
+import Loader from '../../../../../shared/components/Loader';
+import Select from 'react-select';
+import debounce from 'lodash.debounce';
 import {useQuery} from 'react-query';
 import {fetchExercises} from '../../../../../adapter';
-import {AutoCompleteDropDown} from '../../../../../shared/components/AutoCompleteDropDown';
-import Loader from '../../../../../shared/components/Loader';
+import {ExerciseDetailsDto, ExerciseDto} from '../../../../../dtos/exercises/exercise.dto';
 
 type ModalProps = {
     isOpen: boolean;
-    onConfirm: (selectedOption: any) => void;
+    onConfirm: (selectedExercise: ExerciseDto, details: ExerciseDetailsDto) => void;
     onCancel: () => void;
 }
 
 export const AddWorkoutExerciseModal = ({isOpen, onCancel, onConfirm}: ModalProps) => {
-    const [selectedOption, setSelectedOption] = useState('');
-    const {data, isLoading} = useQuery('fetchExercises', fetchExercises);
+    const [selectedExercise, setSelectedExercise] = useState<any>(null);
+    const [selectedReps, setSelectedReps] = useState<number>(0);
+    const [selectedWeight, setSelectedWeight] = useState<number>(0);
+    const [selectedDistance, setSelectedDistance] = useState<number>(0);
+    const [searchText, setSearchText] = useState<string>('');
+    const [inputText, setInputText] = useState<string>('');
+    const setSearchTextDebounced = useRef(
+        debounce((searchText: string) => setSearchText(searchText), 500)
+    ).current;
 
     const cancelButtonRef = useRef(null);
 
     const confirm = () => {
-        setSelectedOption('');
-        onConfirm(selectedOption);
+        setSelectedExercise(null);
+        const details: ExerciseDetailsDto = {
+            weight: selectedWeight,
+            repetitions: selectedReps,
+            distance: selectedDistance
+        }
+        setSelectedDistance(0)
+        setSelectedReps(0)
+        setSelectedWeight(0)
+        onConfirm(selectedExercise, details);
     };
 
     const cancel = () => {
-        setSelectedOption('');
+        setSelectedExercise(null);
         onCancel();
     };
+
+    const renderNone = () => {
+        return <div>none</div>;
+    }
+
+    const renderBodyweight = () => {
+        return <div className={'flex'}>
+            <div>
+                <label htmlFor="reps" className="block text-sm font-medium text-gray-700">
+                    Wiederholungen
+                </label>
+                <div className="mt-1 relative rounded-md">
+                    <div>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedReps(+e.target.value)}
+                            value={selectedReps}
+                            type="number"
+                            name="reps"
+                            id="reps"
+                            className="p-1 border border-gray-300 rounded rounded-md focus:outline-none"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>;
+    }
+
+    const renderStrength = () => {
+        return <div className={'flex'}>
+            <div className={'mr-2'}>
+                <label htmlFor="reps" className="block text-sm font-medium text-gray-700">
+                    Wiederholungen
+                </label>
+                <div className="mt-1 relative rounded-md">
+                    <input
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedReps(+e.target.value)}
+                        type="number"
+                        value={selectedReps}
+                        name="reps"
+                        id="reps"
+                        className="p-1 border border-gray-300 rounded rounded-md focus:outline-none"
+                    />
+                </div>
+            </div>
+            <div>
+                <label htmlFor="weight" className="block text-sm font-medium text-gray-700">
+                    Gewicht
+                </label>
+                <div className="mt-1 relative rounded-md">
+                    <input
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedWeight(+e.target.value)}
+                        type="number"
+                        value={selectedWeight}
+                        name="weight"
+                        id="weight"
+                        className="p-1 border border-gray-300 rounded rounded-md focus:outline-none"
+                    />
+                </div>
+            </div>
+        </div>;
+    }
+
+    const renderCardio = () => {
+        return <div className={'flex'}>
+            <div>
+                <label htmlFor="distance" className="block text-sm font-medium text-gray-700">
+                    Distanz
+                </label>
+                <div className="mt-1 relative rounded-md">
+                    <div>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedDistance(+e.target.value)}
+                            type="number"
+                            value={selectedDistance}
+                            name="distance"
+                            id="distance"
+                            className="p-1 border border-gray-300 rounded rounded-md focus:outline-none"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>;
+    }
+
+    const renderInputs = (type: string) => {
+        switch (type) {
+            case 'None':
+                return renderNone();
+            case 'Cardio':
+                return renderCardio();
+            case 'Strength':
+                return renderStrength();
+            case 'Bodyweight':
+                return renderBodyweight();
+        }
+    }
+
+    const handleExerciseChanged = (selectedItem: any, event: any) => {
+        setSelectedExercise(selectedItem);
+    };
+
+    const handleExerciseInputValueChanged = (inputText: string, event: any) => {
+        // prevent outside click from resetting inputText to ""
+        if (event.action !== 'input-blur' && event.action !== 'menu-close') {
+            setInputText(inputText);
+            setSearchTextDebounced(inputText);
+        }
+    };
+
+    const {data, isLoading} = useQuery('fetchExercises', fetchExercises);
 
     return (
         <Transition.Root show={isOpen} as={Fragment}>
@@ -67,7 +194,7 @@ export const AddWorkoutExerciseModal = ({isOpen, onCancel, onConfirm}: ModalProp
                             className="inline-block align-bottom bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="sm:flex sm:items-start">
-                                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                         <div className="mt-2">
                                             <div className="mt-2">
                                                 <div className="w-full">
@@ -76,14 +203,21 @@ export const AddWorkoutExerciseModal = ({isOpen, onCancel, onConfirm}: ModalProp
                                                         Übung
                                                     </label>
                                                     {isLoading && <Loader/>}
-                                                    {!isLoading &&
-                                                      <AutoCompleteDropDown options={data}
-                                                                            value={selectedOption}
-                                                                            onChange={(item: any) => {
-                                                                                setSelectedOption(item);
-                                                                            }}
-                                                      />
-                                                    }
+                                                    <Select
+                                                        className={'w-full'}
+                                                        getOptionLabel={(exercise: any) => exercise.name}
+                                                        getOptionValue={(exercise: any) => exercise}
+                                                        options={data}
+                                                        isLoading={isLoading}
+                                                        value={selectedExercise}
+                                                        isClearable={true}
+                                                        placeholder={'Übungen durchsuchen'}
+                                                        onChange={handleExerciseChanged}
+                                                        onInputChange={handleExerciseInputValueChanged}
+                                                        noOptionsMessage={() => 'Keine Übung gefunden'}/>
+                                                </div>
+                                                <div className={'w-full'}>
+                                                    {selectedExercise && renderInputs(selectedExercise.type)}
                                                 </div>
                                             </div>
                                         </div>

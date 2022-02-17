@@ -6,4 +6,5 @@ export interface WorkoutDto {
     type: WorkoutType;
     timeLimit: number;
     description: string;
+    exercises: any;
 }
