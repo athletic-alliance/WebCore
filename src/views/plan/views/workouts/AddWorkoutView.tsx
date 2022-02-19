@@ -246,7 +246,7 @@ export const AddWorkoutsViews = () => {
                     </label>
                     <div className="mt-1">
                       <Select
-                          placeholder={"Typ"}
+                          placeholder={'Typ'}
                           components={{Input}}
                           options={options}
                           value={selectedWorkoutType}
