@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavLink } from "react-router-dom";
 
 const navigation = [
@@ -30,7 +31,7 @@ export const Sidebar = () => {
       <nav className={""}>
         <ul>
           {navigation.map((item, index: number) => (
-            <li className={"mt-12 lg:mt-8"}>
+            <li className={"mt-12 lg:mt-8"} key={index}>
               <h5
                 className={
                   "mb-8 font-semibold text-slate-900 dark:text-slate-200 lg:mb-3"

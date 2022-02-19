@@ -36,11 +36,11 @@ export const ShowWorkout = ({ workout }: ShowWorkoutProps) => {
     <div>
       <div>
         <div className={"mb-2"}>
-          <h2 className={"text-1xl font-sans font-light"}>{workout?.type}</h2>
-          <h1 className={"font-sans font-light text-5xl"}>{workout?.name}</h1>
+          <h2 className={"text-1xl font-sans font-light mb-2"}>{workout?.type}</h2>
+          <h1 className={"font-sans font-light text-5xl text-blue-500"}>{workout?.name}</h1>
         </div>
-        <div>
-          <div>{workout?.description}</div>
+        <div className={'text-slate-500 mb-3'}>
+          {workout?.description}
         </div>
         <div>Timelimit {workout?.timeLimit}</div>
       </div>
