@@ -15,10 +15,11 @@ const navigation: SidebarNavItem[] = [
         name: 'Training',
         sub: [
             {name: 'Mein Plan', href: '/plan', visibleFor: [UserRole.Athlete, UserRole.Coach]},
+            {name: 'Plan erstellen', href: '/plan/create', visibleFor: [UserRole.Coach, UserRole.Admin]},
             {name: 'Workouts', href: '/plan/workout/all', visibleFor: [UserRole.Athlete, UserRole.Coach]},
-            {name: 'Workout erstellen', href: '/plan/workout/add', visibleFor: [UserRole.Athlete, UserRole.Coach]},
+            {name: 'Workout erstellen', href: '/plan/workout/create', visibleFor: [UserRole.Athlete, UserRole.Coach]},
             {name: 'Übungen', href: '/plan/exercise/all', visibleFor: [UserRole.Athlete, UserRole.Coach]},
-            {name: 'Übungen erstellen', href: '/plan/exercise/add', visibleFor: [UserRole.Athlete, UserRole.Coach]},
+            {name: 'Übungen erstellen', href: '/plan/exercise/create', visibleFor: [UserRole.Athlete, UserRole.Coach]},
         ]
     },
     {
