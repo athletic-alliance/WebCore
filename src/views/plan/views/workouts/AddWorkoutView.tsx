@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {ExerciseDetailsDto, ExerciseDto,} from '../../../../dtos/exercises/exercise.dto';
 import clsx from 'clsx';
-import Select, {components, InputProps} from 'react-select';
+import Select from 'react-select';
 
 import {WorkoutType} from '../../../../enums/workout-type.enum';
 import {useMutation} from 'react-query';
@@ -78,6 +78,8 @@ export const AddWorkoutsViews = () => {
     const currentRound = rounds[selectedRound - 1];
     const exercises = currentRound.exercises ? currentRound.exercises : [];
 
+    console.log(details);
+
     const exerciseInRound: any = {};
     exerciseInRound.exerciseId = exercise.id;
     exerciseInRound.name = exercise.name;
@@ -116,13 +118,6 @@ export const AddWorkoutsViews = () => {
   const handleWorkoutTypeChanged = (selectedItem: any, event: any) => {
     setSelectedWorkoutType(selectedItem);
   };
-
-  const Input = ({type, ...rest}: InputProps) => (
-      <components.Input
-          {...rest}
-          inputClassName="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none text-xs"
-      />
-  )
 
   return (
       <>
@@ -224,17 +219,17 @@ export const AddWorkoutsViews = () => {
 
                   <div className="grid grid-cols-3 gap-6">
                     <div className="col-span-3 sm:col-span-2">
-                      <label htmlFor="workout-name" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="workout-timelimit" className="block text-sm font-medium text-gray-700">
                         Zeitlimit
                       </label>
                       <div className="mt-1 flex rounded-md shadow-sm">
                         <input
-                            onChange={(e: any) => onNameChanged(e.target.value)}
-                            type="text"
-                            name="workout-name"
-                            id="workout-name"
+                            onChange={(e: any) => onTimeLimitChanged(e.target.value)}
+                            type="number"
+                            name="workout-timelimit"
+                            id="workout-timelimit"
                             className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-sm sm:text-xs border-gray-300"
-                            placeholder="Name des Workouts"
+                            placeholder="Zeitlimit"
                         />
                       </div>
                     </div>
@@ -247,7 +242,25 @@ export const AddWorkoutsViews = () => {
                     <div className="mt-1">
                       <Select
                           placeholder={'Typ'}
-                          components={{Input}}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              borderRadius: '2px',
+                              fontSize: '12px',
+                            }),
+                            input: (base) => ({
+                              ...base,
+                              fontSize: '12px',
+                              'input:focus': {
+                                boxShadow: 'none',
+                              },
+                            }),
+                            option: (provided, state) => ({
+                              ...provided,
+                              fontSize: '12px',
+                              color: 'black'
+                            }),
+                          }}
                           options={options}
                           value={selectedWorkoutType}
                           onChange={handleWorkoutTypeChanged}

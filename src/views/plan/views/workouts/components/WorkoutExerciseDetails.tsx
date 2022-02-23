@@ -28,7 +28,7 @@ export const WorkoutExerciseDetails = ({
       case ExerciseType.Cardio:
         return (
           <>
-            {exercise.details.repetitions}m {exercise.name}
+            {exercise.details.distance}m {exercise.name}
           </>
         );
       case ExerciseType.Strength:

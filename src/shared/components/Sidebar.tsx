@@ -44,10 +44,10 @@ export const Sidebar = () => {
                   "space-y-6 border-l border-slate-100 dark:border-slate-800 lg:space-y-2"
                 }
               >
-                {item.sub?.map((subItem: any) => (
+                {item.sub?.map((subItem: any, idx: number) => (
                   <NavLink
                     to={subItem.href}
-                    key={index}
+                    key={`${index}_${idx}`}
                     className={
                       "-ml-px block flex border-l border-transparent pl-4 text-slate-700 text-sm hover:border-slate-400 hover:text-slate-900"
                     }
