@@ -210,7 +210,7 @@ export const AddWorkoutsViews = () => {
                             type="text"
                             name="workout-name"
                             id="workout-name"
-                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-sm sm:text-xs border-gray-300"
+                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-sm sm:text-sm border-gray-300"
                             placeholder="Name des Workouts"
                         />
                       </div>
@@ -228,7 +228,7 @@ export const AddWorkoutsViews = () => {
                             type="number"
                             name="workout-timelimit"
                             id="workout-timelimit"
-                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-sm sm:text-xs border-gray-300"
+                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-sm sm:text-sm border-gray-300"
                             placeholder="Zeitlimit"
                         />
                       </div>

@@ -6,7 +6,7 @@ import {OrganizeDashboardView} from './views/OrganizeDashboardView';
 import {AllWorkoutsViews} from './views/workouts/AllWorkoutsViews';
 import {AddWorkoutsViews} from './views/workouts/AddWorkoutView';
 import {ShowWorkoutView} from './views/workouts/ShowWorkoutView';
-import {CreatePlanView} from './views/CreatePlanView';
+import {CreatePlanView} from './views/plan/create/CreatePlanView';
 
 export const PlanView = () => {
   return (
