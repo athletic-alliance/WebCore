@@ -5,7 +5,7 @@ import Loader from "../../../../shared/components/Loader";
 import { WorkoutList } from "./components/WorkoutList";
 
 export const AllWorkoutsViews = () => {
-  const { data, isLoading } = useQuery("fetchWorkouts", fetchWorkouts);
+  const { data, isLoading } = useQuery("fetchWorkouts", () => fetchWorkouts(true));
 
   return (
     <div className={`w-full`}>

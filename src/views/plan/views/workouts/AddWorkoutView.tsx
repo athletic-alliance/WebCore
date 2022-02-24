@@ -77,9 +77,6 @@ export const AddWorkoutsViews = () => {
   ) => {
     const currentRound = rounds[selectedRound - 1];
     const exercises = currentRound.exercises ? currentRound.exercises : [];
-
-    console.log(details);
-
     const exerciseInRound: any = {};
     exerciseInRound.exerciseId = exercise.id;
     exerciseInRound.name = exercise.name;

@@ -7,8 +7,8 @@ export const fetchWorkout = async (workoutId: number): Promise<WorkoutDto> => {
   return response.data;
 };
 
-export const fetchWorkouts = async (): Promise<WorkoutDto[]> => {
-  const response = await instance.get<WorkoutDto[]>(`/workout`);
+export const fetchWorkouts = async (includeDetails: boolean): Promise<WorkoutDto[]> => {
+  const response = await instance.get<WorkoutDto[]>(`/workout?includeDetails=${includeDetails}`);
   return response.data;
 };
 
