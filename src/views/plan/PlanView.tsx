@@ -19,8 +19,8 @@ export const PlanView = () => {
               <Route path="workout/all" element={<AllWorkoutsViews/>}/>
               <Route path="workout/create" element={<AddWorkoutsViews/>}/>
               <Route path="workout/:workoutId" element={<ShowWorkoutView/>}/>
-              <Route path="exercise/create" element={<ExerciseOverviewView/>}/>
-              <Route path="exercise/all" element={<AddExerciseView/>}/>
+              <Route path="exercise/all" element={<ExerciseOverviewView/>}/>
+              <Route path="exercise/create" element={<AddExerciseView/>}/>
             </Route>
           </Routes>
         </div>

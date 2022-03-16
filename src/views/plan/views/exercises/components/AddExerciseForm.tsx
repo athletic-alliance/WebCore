@@ -36,10 +36,11 @@ export const AddExerciseForm = ({formSubmitted}: AddExerciseFormProps) => {
                                 Name
                             </label>
                             <Field
-                                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                input
+                                className="focus:ring-0 focus:border-slate-500 block w-full rounded-sm sm:text-sm border-slate-300"
                                 id="name"
                                 name="name"
-                                type="name"
+                                type="text"
                             />
                         </div>
                         <div>
@@ -52,7 +53,7 @@ export const AddExerciseForm = ({formSubmitted}: AddExerciseFormProps) => {
                             <Field
                                 name="exerciseType"
                                 as="select"
-                                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="focus:ring-0 focus:border-slate-500 block w-full rounded-sm sm:text-sm border-slate-300"
                             >
                                 {Object.keys(ExerciseType)
                                     .filter((key: any) => !isNaN(Number(ExerciseType[key])))

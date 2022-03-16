@@ -9,7 +9,7 @@ type SidebarSubItemProps = {
 export const SidebarSubItem = ({item}: SidebarSubItemProps) => {
     return (<NavLink
         to={item.href}
-        className={'-ml-px block flex border-l border-transparent pl-4 text-slate-700 text-sm hover:border-slate-400 hover:text-slate-900'}
+        className={'-ml-px block flex border-l border-transparent pl-4 text-slate-700 text-sm hover:border-slate-400 hover:text-blue-500'}
     >
         {/*<div className={'mr-2'}>{subItem.icon}</div>*/}
         <div className={''}>{item.name}</div>

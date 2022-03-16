@@ -32,7 +32,7 @@ export const PlanDetailsView = ({
                     type="text"
                     name="plan-name"
                     id="plan-name"
-                    className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-sm sm:text-sm border-gray-300"
+                    className="focus:ring-0 focus:border-slate-500 block w-full rounded-sm sm:text-sm border-slate-300"
                     placeholder="Name des Plans"
                 />
             </div>

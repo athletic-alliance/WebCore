@@ -56,7 +56,6 @@ const ShowWizardStep = ({caption, active, done}: WizardStepProps) => {
     }
 
     return (<div className={'flex items-center mb-3'}>
-        {renderIcon()}
-        {renderCaption()}
+        {renderIcon()} {renderCaption()}
     </div>);
 }
