@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react'
 
-export const CalendarView = () => {
-  return <div>Kalendar</div>;
-};
+export const CalendarView = (): JSX.Element => {
+    return <div>Kalendar</div>
+}

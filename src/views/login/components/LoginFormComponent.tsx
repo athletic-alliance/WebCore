@@ -1,30 +1,30 @@
-import React from 'react';
+import React from 'react'
 
-import * as Yup from 'yup';
-import clsx from 'clsx';
-import {Field, Form, Formik, FormikValues} from 'formik';
+import * as Yup from 'yup'
+import clsx from 'clsx'
+import { Field, Form, Formik, FormikValues } from 'formik'
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email')
         .required('Bitte gib deine E-Mail Adresse ein'),
     password: Yup.string().required('Bitte gib ein Passwort ein'),
-});
+})
 
 type LoginFormProps = {
-    formSubmitted: (credentials: FormikValues) => void;
-};
+    formSubmitted: (credentials: FormikValues) => void
+}
 
 export const LoginForm: React.FC<LoginFormProps> = ({
-                                                        formSubmitted,
-                                                    }: LoginFormProps) => {
-    const getStyle = (error: any, touched: boolean | undefined) => {
+    formSubmitted,
+}: LoginFormProps) => {
+    const getStyle = (): string => {
         return clsx({
             'px-3 py-2 border text-sm  border-slate-200 focus:outline-none focus:border-slate-600 focus:ring-0 rounded-sm w-full':
                 true,
             // 'border-red-400': error,
-        });
-    };
+        })
+    }
 
     return (
         <Formik
@@ -34,28 +34,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             }}
             validationSchema={LoginSchema}
             onSubmit={(values: FormikValues) => {
-                formSubmitted(values);
+                formSubmitted(values)
             }}
         >
-            {({errors, touched, isValid, dirty}) => (
-                <div className={'w-96'}>
+            {({ errors, touched, isValid, dirty }) => (
+                <div className="w-96">
                     <Form>
-                        <div className={'mb-2'}>
+                        <div className="mb-2">
                             <Field
                                 id="email"
                                 name="email"
                                 type="email"
                                 placeholder="E-Mail"
-                                className={getStyle(errors.email, touched.email)}
+                                className={getStyle()}
                             />
                         </div>
-                        <div className={'mb-5'}>
+                        <div className="mb-5">
                             <Field
                                 id="password"
                                 name="password"
                                 type="password"
                                 placeholder="Passwort"
-                                className={getStyle(errors.password, touched.password)}
+                                className={getStyle()}
                             />
                         </div>
                         <button
@@ -68,5 +68,5 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 </div>
             )}
         </Formik>
-    );
-};
+    )
+}

@@ -1,22 +1,27 @@
-import React, {useContext} from 'react'
-import {SidebarNavItem, SidebarSubNavItem} from '../../models/sidebar-nav-item';
-import {SidebarSubItem} from './SidebarSubItem';
-import {TokenContext} from '../../context/token.context';
-import {UserRole} from '../../enums/user-role.enum';
+import React, { useContext } from 'react'
+import {
+    SidebarNavItem,
+    SidebarSubNavItem,
+} from '../../models/sidebar-nav-item'
+import { SidebarSubItem } from './SidebarSubItem'
+import { TokenContext } from '../../context/token.context'
+import { UserRole } from '../../enums/user-role.enum'
 
 type SidebarItemProps = {
-    item: SidebarNavItem,
+    item: SidebarNavItem
 }
 
-export const SidebarItem = ({item}: SidebarItemProps) => {
-    const {roles} = useContext(TokenContext)
+export const SidebarItem = ({ item }: SidebarItemProps) => {
+    const { roles } = useContext(TokenContext)
 
     const itemVisible = (subItem: SidebarSubNavItem) => {
         if (roles.includes(UserRole.Admin)) {
-            return true;
+            return true
         }
-        const roleNames = subItem.visibleFor.map((role: UserRole) => role.toString());
-        return roleNames.some((roleName: string) => roles.includes(roleName));
+        const roleNames = subItem.visibleFor.map((role: UserRole) =>
+            role.toString()
+        )
+        return roleNames.some((roleName: string) => roles.includes(roleName))
     }
 
     return (
@@ -33,8 +38,11 @@ export const SidebarItem = ({item}: SidebarItemProps) => {
                     'space-y-6 border-l border-slate-100 dark:border-slate-800 lg:space-y-2'
                 }
             >
-                {item.sub?.filter((item: SidebarSubNavItem) => itemVisible(item)).map((subItem: SidebarSubNavItem, idx: number) => (
-                    <SidebarSubItem item={subItem} key={idx}/>))}
+                {item.sub
+                    ?.filter((item: SidebarSubNavItem) => itemVisible(item))
+                    .map((subItem: SidebarSubNavItem, idx: number) => (
+                        <SidebarSubItem item={subItem} key={idx} />
+                    ))}
             </ul>
         </li>
     )

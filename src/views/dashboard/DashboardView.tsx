@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react'
 
-export const DashboardView = () => {
-  return <>Dashboard</>;
-};
+export const DashboardView = (): JSX.Element => {
+    return <>Dashboard</>
+}

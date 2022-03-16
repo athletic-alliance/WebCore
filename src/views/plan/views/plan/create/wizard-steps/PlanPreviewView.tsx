@@ -1,9 +1,5 @@
 import React from 'react'
 
-type PlanPreviewViewProps = {
-
-}
-
-export const PlanPreviewView = ({}: PlanPreviewViewProps) => {
-    return (<div>Vorschau</div>)
+export const PlanPreviewView = (): JSX.Element => {
+    return <div>Vorschau</div>
 }

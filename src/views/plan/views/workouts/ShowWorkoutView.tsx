@@ -1,21 +1,23 @@
-import React from "react";
-import { useQuery } from "react-query";
-import { fetchWorkout } from "../../../../adapter/workout.adapter";
-import { useParams } from "react-router";
-import Loader from "../../../../shared/components/Loader";
-import { ShowWorkout } from "./components/ShowWorkout";
+import React from 'react'
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router'
 
-export const ShowWorkoutView = () => {
-  let params = useParams();
+import { fetchWorkout } from '../../../../adapter/workout.adapter'
+import { Loader } from '../../../../shared/components/Loader'
+import { ShowWorkout } from './components/ShowWorkout'
 
-  const { data, isLoading } = useQuery(["fetchWorkout", params.workoutId], () =>
-    fetchWorkout(+params.workoutId!!)
-  );
+export const ShowWorkoutView = (): JSX.Element => {
+    const { workoutId } = useParams()
 
-  return (
-    <div className={"w-full"}>
-      {isLoading && <Loader />}
-      {data && <ShowWorkout workout={data} />}
-    </div>
-  );
-};
+    const { data, isLoading } = useQuery(['fetchWorkout', workoutId], () =>
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        fetchWorkout(workoutId!)
+    )
+
+    return (
+        <div className={'w-full'}>
+            {isLoading && <Loader />}
+            {data && <ShowWorkout workout={data} />}
+        </div>
+    )
+}

@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react'
 
-export const MyBoxView = () => {
-  return <div>mybox</div>;
-};
+export const MyBoxView = (): JSX.Element => {
+    return <div>mybox</div>
+}
