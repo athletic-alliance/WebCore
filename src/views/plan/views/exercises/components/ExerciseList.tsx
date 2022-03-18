@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useMutation, useQueryClient } from 'react-query'
-
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import {
     useFilters,
     useGlobalFilter,
@@ -9,10 +7,11 @@ import {
     useTable,
 } from 'react-table'
 import clsx from 'clsx'
+import { nanoid } from 'nanoid'
 import { deleteExercise } from '../../../../../adapter'
 import { notifyError, notifySuccess } from '../../../../../notifications'
-import { ConfirmationModal } from '../../../../../shared/components/modals/ConfirmationModal'
 import { ExerciseDto } from '../../../../../dtos/exercises/exercise.dto'
+import { Pagination } from '../../../../../shared/components/Pagination'
 
 type ExerciseListProps = {
     exercises: ExerciseDto[]
@@ -20,7 +19,12 @@ type ExerciseListProps = {
 
 export const DefaultColumnFilter = ({
     column: { filterValue, setFilter },
-}: any): JSX.Element => {
+}: {
+    column: {
+        filterValue: string
+        setFilter: (filterValue: string | undefined) => void
+    }
+}): JSX.Element => {
     return (
         <input
             className="my-2 block w-full rounded-md border border-gray-300 border-gray-300 py-1 px-2 sm:text-sm"
@@ -36,9 +40,6 @@ export const DefaultColumnFilter = ({
 export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
     const queryClient = useQueryClient()
 
-    const [open, setOpen] = useState<boolean>(false)
-    const [exerciseId, setExerciseId] = useState<number>(0)
-
     const deleteMutation = useMutation((id: number) => deleteExercise(id), {
         onSuccess: () => {
             notifySuccess('Übung gelöscht')
@@ -48,20 +49,6 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
             notifyError('Übung konnte nicht gelöscht werden')
         },
     })
-
-    const openCloseDialog = (exerciseId: number) => {
-        setExerciseId(exerciseId)
-        setOpen(true)
-    }
-
-    const onCloseDialogConfirm = () => {
-        setOpen(false)
-        deleteMutation.mutate(exerciseId)
-    }
-
-    const onCloseDialogCancel = () => {
-        setOpen(false)
-    }
 
     const columns = React.useMemo(
         () => [
@@ -95,19 +82,12 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
         getTableBodyProps,
         headerGroups,
         prepareRow,
-        visibleColumns,
-        preGlobalFilteredRows,
-        setGlobalFilter,
-        page,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        pageCount,
         gotoPage,
+        page,
+        pageCount,
         nextPage,
         previousPage,
-        setPageSize,
-        state: { pageIndex, pageSize },
+        state: { pageIndex },
     } = useTable(
         {
             columns,
@@ -132,151 +112,85 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
     }
 
     return (
-        <>
-            <ConfirmationModal
-                title="Wirklich löschen"
-                text="Übung wirklich löschen"
-                isOpen={open}
-                onCancel={onCloseDialogCancel}
-                onConfirm={onCloseDialogConfirm}
-            />
-            <div className="w-full">
-                <div className="flex flex-col">
-                    <div className="overflow-x-auto">
-                        <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                            <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-                                <table
-                                    {...getTableProps()}
-                                    className="min-w-full divide-y divide-gray-200"
-                                >
-                                    <thead className="bg-gray-50">
-                                        {headerGroups.map((headerGroup, i) => (
-                                            <tr
-                                                {...headerGroup.getHeaderGroupProps()}
-                                                key={i}
-                                            >
-                                                {headerGroup.headers.map(
-                                                    (column, i) => (
-                                                        <th
-                                                            {...column.getHeaderProps()}
-                                                            key={i}
-                                                            className="px-6 py-3 text-left font-medium uppercase text-gray-500 text-xs tracking-wider"
-                                                        >
-                                                            {column.render(
-                                                                'Header'
-                                                            )}
-                                                            <div>
-                                                                {column.canFilter
-                                                                    ? column.render(
-                                                                          'Filter'
-                                                                      )
-                                                                    : null}
-                                                            </div>
-                                                        </th>
-                                                    )
-                                                )}
-                                            </tr>
-                                        ))}
-                                    </thead>
-                                    <tbody
-                                        {...getTableBodyProps()}
-                                        className="divide-y divide-gray-200 bg-white"
-                                    >
-                                        {page.map((row, i) => {
-                                            prepareRow(row)
-                                            return (
-                                                <tr
-                                                    {...row.getRowProps()}
-                                                    key={i}
-                                                >
-                                                    {row.cells.map(
-                                                        (cell, i) => {
-                                                            return (
-                                                                <td
-                                                                    {...cell.getCellProps()}
-                                                                    key={i}
-                                                                    className="whitespace-nowrap px-6 py-4 text-sm"
-                                                                >
-                                                                    {cell.render(
-                                                                        'Cell'
-                                                                    )}
-                                                                </td>
-                                                            )
-                                                        }
-                                                    )}
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex items-center justify-between bg-white px-4 py-3 sm:px-8">
-                    <div className="flex flex-1 justify-between sm:hidden">
-                        <a
-                            href="#"
-                            className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50"
-                        >
-                            Previous
-                        </a>
-                        <a
-                            href="#"
-                            className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50"
-                        >
-                            Next
-                        </a>
-                    </div>
-                    <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                        <div>
-                            <p className="text-gray-700 text-sm">
-                                <span className="font-medium">1</span> -{' '}
-                                <span className="font-medium">10</span> von{' '}
-                                <span className="font-medium">
-                                    {exercises.length}
-                                </span>{' '}
-                                Ergebnissen
-                            </p>
-                        </div>
-                        <div>
-                            <nav
-                                className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm"
-                                aria-label="Pagination"
+        <div className="w-full">
+            <div className="flex flex-col">
+                <div className="overflow-x-auto">
+                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+                            <table
+                                {...getTableProps()}
+                                className="min-w-full divide-y divide-gray-200"
                             >
-                                <span
-                                    onClick={() => previousPage()}
-                                    className="relative inline-flex cursor-pointer items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 font-medium text-gray-500 text-sm hover:bg-gray-50"
+                                <thead className="bg-gray-50">
+                                    {headerGroups.map((headerGroup) => (
+                                        <tr
+                                            {...headerGroup.getHeaderGroupProps()}
+                                            key={nanoid()}
+                                        >
+                                            {headerGroup.headers.map(
+                                                (column) => (
+                                                    <th
+                                                        {...column.getHeaderProps()}
+                                                        key={nanoid()}
+                                                        className="px-6 py-3 text-left font-medium uppercase text-gray-500 text-xs tracking-wider"
+                                                    >
+                                                        {column.render(
+                                                            'Header'
+                                                        )}
+                                                        <div>
+                                                            {column.canFilter
+                                                                ? column.render(
+                                                                      'Filter'
+                                                                  )
+                                                                : null}
+                                                        </div>
+                                                    </th>
+                                                )
+                                            )}
+                                        </tr>
+                                    ))}
+                                </thead>
+                                <tbody
+                                    {...getTableBodyProps()}
+                                    className="divide-y divide-gray-200 bg-white"
                                 >
-                                    <span className="sr-only">Previous</span>
-                                    <ChevronLeftIcon
-                                        className="h-5 w-5"
-                                        aria-hidden="true"
-                                    />
-                                </span>
-                                {Array.from(Array(pageCount), (e, i) => (
-                                    <span
-                                        aria-current="page"
-                                        className={getStyle(i)}
-                                    >
-                                        {i + 1}
-                                    </span>
-                                ))}
-                                <span
-                                    onClick={() => nextPage()}
-                                    className="relative inline-flex cursor-pointer items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 font-medium text-gray-500 text-sm hover:bg-gray-50"
-                                >
-                                    <span className="sr-only">Next</span>
-                                    <ChevronRightIcon
-                                        className="h-5 w-5"
-                                        aria-hidden="true"
-                                    />
-                                </span>
-                            </nav>
+                                    {page.map((row) => {
+                                        prepareRow(row)
+                                        return (
+                                            <tr
+                                                {...row.getRowProps()}
+                                                key={nanoid()}
+                                            >
+                                                {row.cells.map((cell) => {
+                                                    return (
+                                                        <td
+                                                            {...cell.getCellProps()}
+                                                            key={nanoid()}
+                                                            className="whitespace-nowrap px-6 py-4 text-sm"
+                                                        >
+                                                            {cell.render(
+                                                                'Cell'
+                                                            )}
+                                                        </td>
+                                                    )
+                                                })}
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+            <Pagination
+                pageIndex={pageIndex}
+                nextClicked={nextPage}
+                previousClicked={previousPage}
+                goToClicked={gotoPage}
+                pageCount={pageCount}
+                itemCount={exercises.length}
+            />
+        </div>
     )
 }

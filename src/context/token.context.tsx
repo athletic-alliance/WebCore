@@ -1,7 +1,7 @@
-import React, {createContext} from 'react';
+import { createContext } from 'react'
 
 interface TokenContextType {
-    roles: string[];
+    roles: string[]
 }
 
-export const TokenContext = createContext<TokenContextType>({roles: []});
+export const TokenContext = createContext<TokenContextType>({ roles: [] })

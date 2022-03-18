@@ -12,14 +12,12 @@ export const WizardControls = ({
     increaseClicked,
     decreaseClicked,
     saveClicked,
-}: WizardControlsProps) => {
+}: WizardControlsProps): JSX.Element => {
     return (
-        <div className={'flex'}>
+        <div className="flex">
             {currentStep > 0 && (
                 <div
-                    className={
-                        'mr-3 cursor-pointer rounded rounded-md border border-slate-300 px-2 py-1 text-sm'
-                    }
+                    className="mr-3 cursor-pointer rounded rounded-md border border-slate-300 px-2 py-1 text-sm"
                     onClick={decreaseClicked}
                 >
                     Zurück
@@ -27,9 +25,7 @@ export const WizardControls = ({
             )}
             {currentStep < 4 && (
                 <div
-                    className={
-                        'cursor-pointer rounded rounded-md border border-slate-300 px-2 py-1 text-sm'
-                    }
+                    className="cursor-pointer rounded rounded-md border border-slate-300 px-2 py-1 text-sm"
                     onClick={increaseClicked}
                 >
                     Weiter
@@ -37,9 +33,7 @@ export const WizardControls = ({
             )}
             {currentStep === 4 && (
                 <div
-                    className={
-                        'cursor-pointer rounded rounded-md border border-slate-300 px-2 py-1 text-sm'
-                    }
+                    className="cursor-pointer rounded rounded-md border border-slate-300 px-2 py-1 text-sm"
                     onClick={saveClicked}
                 >
                     Speichern

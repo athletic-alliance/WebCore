@@ -1,4 +1,6 @@
 import React, { useContext } from 'react'
+
+import { nanoid } from 'nanoid'
 import {
     SidebarNavItem,
     SidebarSubNavItem,
@@ -11,10 +13,10 @@ type SidebarItemProps = {
     item: SidebarNavItem
 }
 
-export const SidebarItem = ({ item }: SidebarItemProps) => {
+export const SidebarItem = ({ item }: SidebarItemProps): JSX.Element => {
     const { roles } = useContext(TokenContext)
 
-    const itemVisible = (subItem: SidebarSubNavItem) => {
+    const itemVisible = (subItem: SidebarSubNavItem): boolean => {
         if (roles.includes(UserRole.Admin)) {
             return true
         }
@@ -25,23 +27,15 @@ export const SidebarItem = ({ item }: SidebarItemProps) => {
     }
 
     return (
-        <li className={'mt-12 lg:mt-8'}>
-            <h5
-                className={
-                    'mb-8 font-semibold text-slate-900 dark:text-slate-200 lg:mb-3'
-                }
-            >
+        <li className="mt-12 lg:mt-8">
+            <h5 className="mb-8 font-semibold text-white lg:mb-3">
                 {item.name}
             </h5>
-            <ul
-                className={
-                    'space-y-6 border-l border-slate-100 dark:border-slate-800 lg:space-y-2'
-                }
-            >
+            <ul className="space-y-6 border-l border-slate-100 lg:space-y-2">
                 {item.sub
-                    ?.filter((item: SidebarSubNavItem) => itemVisible(item))
-                    .map((subItem: SidebarSubNavItem, idx: number) => (
-                        <SidebarSubItem item={subItem} key={idx} />
+                    ?.filter((itm: SidebarSubNavItem) => itemVisible(itm))
+                    .map((subItem: SidebarSubNavItem) => (
+                        <SidebarSubItem item={subItem} key={nanoid()} />
                     ))}
             </ul>
         </li>

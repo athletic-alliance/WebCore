@@ -22,15 +22,13 @@ const SignedInLayout = (): JSX.Element => {
         <RequireAuth>
             <>
                 <Navbar />
-                <main className="flex flex-auto">
-                    <div className="absolute top-0 bottom-0 right-0 left-1/2 hidden lg:block" />
-                    <div className="max-w-container relative mx-auto flex w-full px-4 sm:px-6 lg:px-8">
+                <main className="flex flex-auto bg-slate-800">
+                    <div className="max-w-container relative mx-auto flex w-full">
                         <div className="w-full flex-none lg:grid lg:grid-cols-6 lg:gap-8">
-                            <div className="-mx-4 bg-gray-50 py-4 px-4 sm:-mx-6 sm:py-4 sm:px-6 lg:mx-0 lg:bg-transparent lg:pl-0 lg:pr-8">
+                            <div className="-mx-4 py-4 px-4 sm:-mx-6 sm:py-4 sm:px-6  lg:mx-0 lg:pl-0 lg:pr-8">
                                 <Sidebar />
                             </div>
                             <div className="relative col-span-5 bg-white lg:-ml-8 lg:shadow-md">
-                                <div className="absolute top-0 bottom-0 -right-4 hidden w-8 bg-white lg:block" />
                                 <div className="relative py-8 px-12 sm:py-12">
                                     <Outlet />
                                 </div>
@@ -73,4 +71,3 @@ const App = (): JSX.Element => {
 }
 
 export default App
-

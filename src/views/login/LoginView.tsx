@@ -11,10 +11,10 @@ export const LoginView = (): JSX.Element => {
 
     const [hasError, setHasError] = useState<boolean>(false)
 
-    const handleLogin = (credentials: Credentials) => {
+    const handleLogin = (credentials: Credentials): void => {
         setHasError(false)
         signIn(credentials)
-            .then((res) => {
+            .then(() => {
                 navigate('/dashboard')
             })
             .catch(() => setHasError(true))

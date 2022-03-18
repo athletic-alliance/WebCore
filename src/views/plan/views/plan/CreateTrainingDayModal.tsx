@@ -1,9 +1,17 @@
 import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import debounce from 'lodash.debounce'
-import Select, { ActionMeta } from 'react-select'
+import Select, {
+    ActionMeta,
+    ActionMetaBase,
+    InputActionMeta,
+} from 'react-select'
 import { useQuery } from 'react-query'
 import DatePicker from 'react-datepicker'
+import {
+    OnChangeValue,
+    SingleValue,
+} from 'react-select/dist/declarations/src/types'
 import { fetchWorkouts } from '../../../../adapter/workout.adapter'
 import { Loader } from '../../../../shared/components/Loader'
 import { WorkoutDto } from '../../../../dtos/workout/workout.dto'
@@ -22,7 +30,9 @@ export const CreateTrainingDayModal: React.FC<ModalProps> = ({
     const [searchText, setSearchText] = useState<string>('')
     const [inputText, setInputText] = useState<string>('')
     const [date, setDate] = useState<Date>(new Date())
-    const [selectedWorkout, setSelectedWorkout] = useState<WorkoutDto>(null)
+    const [selectedWorkout, setSelectedWorkout] = useState<WorkoutDto | null>(
+        null
+    )
     const setSearchTextDebounced = useRef(
         debounce(
             (searchTextValue: string) => setSearchText(searchTextValue),
@@ -45,20 +55,20 @@ export const CreateTrainingDayModal: React.FC<ModalProps> = ({
     }
 
     const handleWorkoutChanged = (
-        workout: WorkoutDto,
+        workout: SingleValue<WorkoutDto>,
         event: ActionMeta<WorkoutDto>
     ): void => {
         setSelectedWorkout(workout)
     }
 
     const handleWorkoutInputValueChanged = (
-        inputText: string,
-        event: any
+        searchValue: string,
+        event: InputActionMeta
     ): void => {
         // prevent outside click from resetting inputText to ""
         if (event.action !== 'input-blur' && event.action !== 'menu-close') {
-            setInputText(inputText)
-            setSearchTextDebounced(inputText)
+            setInputText(searchValue)
+            setSearchTextDebounced(searchValue)
         }
     }
 
@@ -156,9 +166,9 @@ export const CreateTrainingDayModal: React.FC<ModalProps> = ({
                                                                             workout.name
                                                                         }
                                                                         getOptionValue={(
-                                                                            workout: any
+                                                                            workout: WorkoutDto
                                                                         ) =>
-                                                                            workout
+                                                                            workout.name
                                                                         }
                                                                         options={
                                                                             data
@@ -199,6 +209,13 @@ export const CreateTrainingDayModal: React.FC<ModalProps> = ({
                                                                     locale="de"
                                                                     dateFormat="dd.MM.yyyy"
                                                                     isClearable
+                                                                    onChange={(
+                                                                        selectedDate: Date
+                                                                    ) =>
+                                                                        setDate(
+                                                                            selectedDate
+                                                                        )
+                                                                    }
                                                                 />
                                                             </div>
                                                         </div>

@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { nanoid } from 'nanoid'
+import jwtDecode from 'jwt-decode'
 import { UserRole } from '../../enums/user-role.enum'
 import { AUTHTOKENKEY, ROLESCHEMAKEY } from '../../constants'
-import jwtDecode from 'jwt-decode'
 import { SidebarItem } from './SidebarItem'
 import { SidebarNavItem } from '../../models/sidebar-nav-item'
 import { TokenContext } from '../../context/token.context'
@@ -67,22 +68,22 @@ const navigation: SidebarNavItem[] = [
     // {name: 'Kalendar', href: '/calendar', icon: <CgCalendar className={'w-5 h-5'}/>},
 ]
 
-export const Sidebar = () => {
+export const Sidebar = (): JSX.Element => {
     const jwt = localStorage.getItem(AUTHTOKENKEY) as string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const decodedToken = jwtDecode(jwt) as any
 
-    const roles = decodedToken[ROLESCHEMAKEY]
+    const roles = useMemo(() => decodedToken[ROLESCHEMAKEY], [decodedToken])
 
     return (
+        // eslint-disable-next-line react/jsx-no-constructed-context-values
         <TokenContext.Provider value={{ roles }}>
-            <div className={''}>
-                <nav className={''}>
-                    <ul>
-                        {navigation.map(
-                            (item: SidebarNavItem, index: number) => (
-                                <SidebarItem item={item} key={index} />
-                            )
-                        )}
+            <div>
+                <nav>
+                    <ul className="px-5">
+                        {navigation.map((item: SidebarNavItem) => (
+                            <SidebarItem item={item} key={nanoid()} />
+                        ))}
                     </ul>
                 </nav>
             </div>

@@ -1,15 +1,28 @@
 import React from 'react'
 import * as Yup from 'yup'
+import { nanoid } from 'nanoid'
 import { Field, Form, Formik } from 'formik'
 import { ExerciseType } from '../../../../../enums/exercise-type.enum'
 import { CreateExerciseDto } from '../../../../../dtos/exercises/create-exercise.dto'
 
 const NewExerciseSchema = Yup.object().shape({
     name: Yup.string().required('Name wird benötigt'),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     exerciseType: Yup.mixed<ExerciseType>().oneOf(Object.values(ExerciseType)),
 })
 
+interface ExerciseTypeOption {
+    value: ExerciseType
+    label: string
+}
+
+const exerciseTypeOptions: ExerciseTypeOption[] = [
+    { value: ExerciseType.Bodyweight, label: 'Bodyweight' },
+    { value: ExerciseType.Cardio, label: 'Cardio' },
+    { value: ExerciseType.Strength, label: 'Strength' },
+    { value: ExerciseType.None, label: 'Keine' },
+]
 type AddExerciseFormProps = {
     formSubmitted: (values: CreateExerciseDto) => void
 }
@@ -24,7 +37,8 @@ export const AddExerciseForm = ({
                 exerciseType: ExerciseType.Bodyweight,
             }}
             validationSchema={NewExerciseSchema}
-            onSubmit={(values: any) => {
+            onSubmit={(values: CreateExerciseDto) => {
+                console.log('test')
                 formSubmitted(values)
             }}
         >
@@ -39,7 +53,7 @@ export const AddExerciseForm = ({
                                 Name
                             </label>
                             <Field
-                                input
+                                as="input"
                                 className="block w-full rounded-sm border-slate-300 focus:border-slate-500 focus:ring-0 sm:text-sm"
                                 id="name"
                                 name="name"
@@ -58,16 +72,18 @@ export const AddExerciseForm = ({
                                 as="select"
                                 className="block w-full rounded-sm border-slate-300 focus:border-slate-500 focus:ring-0 sm:text-sm"
                             >
-                                {Object.keys(ExerciseType)
-                                    .filter(
-                                        (key: any) =>
-                                            !isNaN(Number(ExerciseType[key]))
-                                    )
-                                    .map((key) => (
-                                        <option key={key} value={key}>
-                                            {key}
+                                {exerciseTypeOptions.map(
+                                    (
+                                        exerciseTypeOption: ExerciseTypeOption
+                                    ) => (
+                                        <option
+                                            key={nanoid()}
+                                            value={exerciseTypeOption.value}
+                                        >
+                                            {exerciseTypeOption.label}
                                         </option>
-                                    ))}
+                                    )
+                                )}
                             </Field>
                         </div>
                         <div className="py-3">

@@ -1,5 +1,5 @@
-import React from 'react';
+import React from 'react'
 
-export const PageNotFoundView = () => {
-  return <>Page not found!</>;
-};
+export const PageNotFoundView = (): JSX.Element => {
+    return <>Page not found!</>
+}

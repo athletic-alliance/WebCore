@@ -2,12 +2,18 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { format } from 'date-fns'
 import { Loader } from '../../../shared/components/Loader'
-import { fetchUserPlan } from '../../../adapter/plan.adapter'
+import { fetchUserPlan } from '../../../adapter'
 import { ShowWorkout } from './workouts/components/ShowWorkout'
+import { notifyError } from '../../../notifications'
 
 export const OrganizeDashboardView = (): JSX.Element => {
-    const { data, isLoading } = useQuery(['fetchUserPlan'], () =>
-        fetchUserPlan()
+    const { data, isLoading } = useQuery(
+        ['fetchUserPlan'],
+        () => fetchUserPlan(),
+        {
+            onError: (error) =>
+                notifyError('Trainingsplan konnte nicht gelade werden'),
+        }
     )
 
     return (

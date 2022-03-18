@@ -1,8 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { ChangeEvent, Fragment, useRef, useState } from 'react'
-import Select from 'react-select'
+import Select, { InputActionMeta } from 'react-select'
 import debounce from 'lodash.debounce'
 import { useQuery } from 'react-query'
+import { SingleValue } from 'react-select/dist/declarations/src/types'
 import { Loader } from '../../../../../shared/components/Loader'
 
 import { fetchExercises } from '../../../../../adapter'
@@ -10,6 +11,7 @@ import {
     ExerciseDetailsDto,
     ExerciseDto,
 } from '../../../../../dtos/exercises/exercise.dto'
+import { ExerciseType } from '../../../../../enums/exercise-type.enum'
 
 type ModalProps = {
     isOpen: boolean
@@ -24,30 +26,32 @@ export const AddWorkoutExerciseModal = ({
     isOpen,
     onCancel,
     onConfirm,
-}: ModalProps) => {
-    const [selectedExercise, setSelectedExercise] = useState<any>(null)
+}: ModalProps): JSX.Element => {
+    const [selectedExercise, setSelectedExercise] =
+        useState<ExerciseDto | null>(null)
     const [selectedReps, setSelectedReps] = useState<number>(0)
     const [selectedWeight, setSelectedWeight] = useState<number>(0)
     const [selectedDistance, setSelectedDistance] = useState<number>(0)
     const [searchText, setSearchText] = useState<string>('')
     const [inputText, setInputText] = useState<string>('')
     const setSearchTextDebounced = useRef(
-        debounce((searchText: string) => setSearchText(searchText), 500)
+        debounce((searchValue: string) => setSearchText(searchValue), 500)
     ).current
 
     const cancelButtonRef = useRef(null)
 
-    const confirm = () => {
-        setSelectedExercise(null)
-        const details: ExerciseDetailsDto = {
-            weight: selectedWeight,
-            repetitions: selectedReps,
-            distance: selectedDistance,
+    const confirm = (): void => {
+        if (selectedExercise) {
+            const details: ExerciseDetailsDto = {
+                weight: selectedWeight,
+                repetitions: selectedReps,
+                distance: selectedDistance,
+            }
+            setSelectedDistance(0)
+            setSelectedReps(0)
+            setSelectedWeight(0)
+            onConfirm(selectedExercise, details)
         }
-        setSelectedDistance(0)
-        setSelectedReps(0)
-        setSelectedWeight(0)
-        onConfirm(selectedExercise, details)
     }
 
     const cancel = (): void => {
@@ -164,30 +168,35 @@ export const AddWorkoutExerciseModal = ({
         )
     }
 
-    const renderInputs = (type: string): JSX.Element => {
-        switch (type) {
-            case 'None':
+    const renderInputs = (type: ExerciseType): JSX.Element => {
+        switch (+ExerciseType[type]) {
+            case ExerciseType.None:
                 return renderNone()
-            case 'Cardio':
+            case ExerciseType.Cardio:
                 return renderCardio()
-            case 'Strength':
-                return renderStrength()
-            case 'Bodyweight':
+            case ExerciseType.Bodyweight:
                 return renderBodyweight()
+            case ExerciseType.Strength:
+                return renderStrength()
             default:
                 return <div>Not set</div>
         }
     }
 
-    const handleExerciseChanged = (selectedItem: any, event: any) => {
+    const handleExerciseChanged = (
+        selectedItem: SingleValue<ExerciseDto>
+    ): void => {
         setSelectedExercise(selectedItem)
     }
 
-    const handleExerciseInputValueChanged = (inputText: string, event: any) => {
+    const handleExerciseInputValueChanged = (
+        searchValue: string,
+        event: InputActionMeta
+    ): void => {
         // prevent outside click from resetting inputText to ""
         if (event.action !== 'input-blur' && event.action !== 'menu-close') {
-            setInputText(inputText)
-            setSearchTextDebounced(inputText)
+            setInputText(searchValue)
+            setSearchTextDebounced(searchValue)
         }
     }
 
@@ -249,15 +258,15 @@ export const AddWorkoutExerciseModal = ({
                                                     <Select
                                                         className="w-full"
                                                         getOptionLabel={(
-                                                            exercise: any
+                                                            exercise: ExerciseDto
                                                         ) => exercise.name}
                                                         getOptionValue={(
-                                                            exercise: any
-                                                        ) => exercise}
+                                                            exercise: ExerciseDto
+                                                        ) => exercise.name}
                                                         options={data}
                                                         isLoading={isLoading}
-                                                        value={selectedExercise}
                                                         isClearable
+                                                        value={selectedExercise}
                                                         placeholder="Übungen durchsuchen"
                                                         onChange={
                                                             handleExerciseChanged
