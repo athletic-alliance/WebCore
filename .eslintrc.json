@@ -85,7 +85,8 @@
     "react/no-unstable-nested-components": "off",
     "react/destructuring-assignment": "off",
     "react/button-has-type": "off",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off"
   },
   "settings": {
     "import/resolver": {

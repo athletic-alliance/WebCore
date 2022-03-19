@@ -4,20 +4,21 @@ import {
     useFilters,
     useGlobalFilter,
     usePagination,
+    useRowSelect,
     useTable,
 } from 'react-table'
 import clsx from 'clsx'
-import { nanoid } from 'nanoid'
 import { deleteExercise } from '../../../../../adapter'
 import { notifyError, notifySuccess } from '../../../../../notifications'
 import { ExerciseDto } from '../../../../../dtos/exercises/exercise.dto'
 import { Pagination } from '../../../../../shared/components/Pagination'
+import IndeterminateCheckbox from '../../../../../shared/IndeterminateCheckbox'
 
 type ExerciseListProps = {
     exercises: ExerciseDto[]
 }
 
-export const DefaultColumnFilter = ({
+const DefaultColumnFilter = ({
     column: { filterValue, setFilter },
 }: {
     column: {
@@ -32,7 +33,7 @@ export const DefaultColumnFilter = ({
             onChange={(e) => {
                 setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
             }}
-            placeholder="Alle durchsuchen ..."
+            placeholder="Alle durchsuchen..."
         />
     )
 }
@@ -81,6 +82,7 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
         getTableProps,
         getTableBodyProps,
         headerGroups,
+        filteredRows,
         prepareRow,
         gotoPage,
         page,
@@ -97,7 +99,37 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
         },
         useFilters, // useFilters!
         useGlobalFilter, // useGlobalFilter!
-        usePagination
+        usePagination,
+        useRowSelect,
+        (hooks) => {
+            hooks.visibleColumns.push((clmns) => [
+                // Let's make a column for selection
+                {
+                    id: 'selection',
+                    // The header can use the table's getToggleAllRowsSelectedProps method
+                    // to render a checkbox
+                    Header: ({ getToggleAllRowsSelectedProps }) => (
+                        <div>
+                            <IndeterminateCheckbox
+                                name="headCheckBox"
+                                {...getToggleAllRowsSelectedProps()}
+                            />
+                        </div>
+                    ),
+                    // The cell can use the individual row's getToggleRowSelectedProps method
+                    // to the render a checkbox
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+                    Cell: ({ row }: any) => (
+                        <div>
+                            <IndeterminateCheckbox
+                                {...row.getToggleRowSelectedProps()}
+                            />
+                        </div>
+                    ),
+                },
+                ...clmns,
+            ])
+        }
     )
 
     const getStyle = (index: number): string => {
@@ -125,13 +157,11 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
                                     {headerGroups.map((headerGroup) => (
                                         <tr
                                             {...headerGroup.getHeaderGroupProps()}
-                                            key={nanoid()}
                                         >
                                             {headerGroup.headers.map(
                                                 (column) => (
                                                     <th
                                                         {...column.getHeaderProps()}
-                                                        key={nanoid()}
                                                         className="px-6 py-3 text-left font-medium uppercase text-gray-500 text-xs tracking-wider"
                                                     >
                                                         {column.render(
@@ -154,19 +184,18 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
                                     {...getTableBodyProps()}
                                     className="divide-y divide-gray-200 bg-white"
                                 >
-                                    {page.map((row) => {
+                                    {page.map((row, i) => {
                                         prepareRow(row)
                                         return (
                                             <tr
                                                 {...row.getRowProps()}
-                                                key={nanoid()}
+                                                className="cursor-pointer hover:bg-gray-100"
                                             >
                                                 {row.cells.map((cell) => {
                                                     return (
                                                         <td
                                                             {...cell.getCellProps()}
-                                                            key={nanoid()}
-                                                            className="whitespace-nowrap px-6 py-4 text-sm"
+                                                            className="px-6 py-4 text-sm"
                                                         >
                                                             {cell.render(
                                                                 'Cell'
@@ -189,7 +218,7 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
                 previousClicked={previousPage}
                 goToClicked={gotoPage}
                 pageCount={pageCount}
-                itemCount={exercises.length}
+                itemCount={filteredRows.length}
             />
         </div>
     )

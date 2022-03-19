@@ -11,8 +11,8 @@ export const OrganizeDashboardView = (): JSX.Element => {
         ['fetchUserPlan'],
         () => fetchUserPlan(),
         {
-            onError: (error) =>
-                notifyError('Trainingsplan konnte nicht gelade werden'),
+            onError: () =>
+                notifyError('Trainingsplan konnte nicht geladen werden'),
         }
     )
 
