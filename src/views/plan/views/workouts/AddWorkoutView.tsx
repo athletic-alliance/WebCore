@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import Select from 'react-select'
-
-import { SingleValue } from 'react-select/dist/declarations/src/types'
+import Select, { components, OptionProps } from 'react-select'
 import { nanoid } from 'nanoid'
 import { useMutation } from 'react-query'
 import { XIcon } from '@heroicons/react/outline'
@@ -19,6 +17,18 @@ import {
 import { ExerciseInRoundDto } from '../../../../dtos/exercises/exercise-in-round.dto'
 import { WorkoutRoundDto } from '../../../../dtos/workout/workout-round.dto'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ValueContainer = ({ ...rest }: any): JSX.Element => (
+    <div className="pl-1 text-sm">
+        <components.ValueContainer {...rest} />
+    </div>
+)
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Input = ({ type, ...rest }: any): JSX.Element => (
+    <components.Input className="text-sm" {...rest} />
+)
+
 interface WorkoutTypeOption {
     value: WorkoutType
     label: string
@@ -29,6 +39,30 @@ const options: WorkoutTypeOption[] = [
     { value: WorkoutType.ForTime, label: 'For Time' },
     { value: WorkoutType.AMRAP, label: 'AMRAP' },
 ]
+
+const Option = (props: OptionProps<WorkoutTypeOption>): JSX.Element => {
+    return (
+        <div className="text-sm">
+            <components.Option {...props} />
+        </div>
+    )
+}
+
+const customStyles = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    control: (base: any, state: any) => ({
+        ...base,
+        boxShadow: 'none',
+        fontSize: '12px',
+        '&:focus-within': {
+            borderColor: 'rgb(37, 99, 235)',
+            boxShadow:
+                'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(219, 234, 254) 0px 0px 0px 1px, rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset',
+            outlineWidth: '3px',
+        },
+        // You can also use state.isFocused to conditionally style based on the focus state
+    }),
+}
 
 export const AddWorkoutsViews = (): JSX.Element => {
     const [workoutToSave, setWorkoutToSave] = useState<CreateWorkoutDto>({
@@ -139,12 +173,13 @@ export const AddWorkoutsViews = (): JSX.Element => {
     }
 
     const handleWorkoutTypeChanged = (
-        newValue: SingleValue<WorkoutTypeOption>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        option: any | null
     ): void => {
-        if (newValue) {
+        if (option) {
             setSelectedWorkoutType({
-                value: newValue.value,
-                label: newValue.label,
+                value: option.value,
+                label: option.label,
             })
         }
     }
@@ -276,7 +311,7 @@ export const AddWorkoutsViews = (): JSX.Element => {
                                                 type="text"
                                                 name="workout-name"
                                                 id="workout-name"
-                                                className="block w-full flex-1 rounded-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                                                 placeholder="Name des Workouts"
                                             />
                                         </div>
@@ -303,7 +338,7 @@ export const AddWorkoutsViews = (): JSX.Element => {
                                                 type="number"
                                                 name="workout-timelimit"
                                                 id="workout-timelimit"
-                                                className="block w-full flex-1 rounded-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                                                 placeholder="Zeitlimit"
                                             />
                                         </div>
@@ -319,26 +354,13 @@ export const AddWorkoutsViews = (): JSX.Element => {
                                     </label>
                                     <div className="mt-1">
                                         <Select
-                                            placeholder="Typ"
-                                            styles={{
-                                                control: (base) => ({
-                                                    ...base,
-                                                    borderRadius: '2px',
-                                                    fontSize: '12px',
-                                                }),
-                                                input: (base) => ({
-                                                    ...base,
-                                                    fontSize: '12px',
-                                                    'input:focus': {
-                                                        boxShadow: 'none',
-                                                    },
-                                                }),
-                                                option: (provided) => ({
-                                                    ...provided,
-                                                    fontSize: '12px',
-                                                    color: 'black',
-                                                }),
+                                            styles={customStyles}
+                                            components={{
+                                                ValueContainer,
+                                                Option,
+                                                Input,
                                             }}
+                                            placeholder="Typ"
                                             options={options}
                                             value={selectedWorkoutType}
                                             onChange={handleWorkoutTypeChanged}
@@ -368,7 +390,7 @@ export const AddWorkoutsViews = (): JSX.Element => {
                                             id="description"
                                             name="description"
                                             rows={3}
-                                            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                                             placeholder="Zusätzliche Informationen zum Workout"
                                             defaultValue=""
                                         />
@@ -379,7 +401,7 @@ export const AddWorkoutsViews = (): JSX.Element => {
                                 <button
                                     onClick={saveWorkout}
                                     type="submit"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 font-medium text-white shadow-sm text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                     Speichern
                                 </button>

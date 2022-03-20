@@ -48,16 +48,14 @@ export const AddExerciseForm = ({
                         <div className="w-full">
                             <label
                                 htmlFor="name"
-                                className="block font-medium text-gray-700 text-sm"
+                                className="mb-2 block font-medium text-gray-700 text-sm"
                             >
                                 Name
                             </label>
-                            <Field
-                                as="input"
-                                className="block w-full rounded-sm border-slate-300 focus:border-slate-500 focus:ring-0 sm:text-sm"
+                            <input
                                 id="name"
-                                name="name"
                                 type="text"
+                                className="focus:ring-none w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:outline-none"
                             />
                         </div>
                         <div>
@@ -70,7 +68,7 @@ export const AddExerciseForm = ({
                             <Field
                                 name="exerciseType"
                                 as="select"
-                                className="block w-full rounded-sm border-slate-300 focus:border-slate-500 focus:ring-0 sm:text-sm"
+                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:outline-blue-50 focus:ring-blue-100"
                             >
                                 {exerciseTypeOptions.map(
                                     (
