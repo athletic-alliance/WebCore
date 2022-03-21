@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import DatePicker from 'react-datepicker'
 
 type PlanDetailsViewProps = {
@@ -30,12 +30,14 @@ export const PlanDetailsView = ({
                 </label>
                 <div className="mt-1 flex rounded-md shadow-sm">
                     <input
-                        onChange={(e: any) => nameChanged(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            nameChanged(e.target.value)
+                        }
                         value={planName}
                         type="text"
                         name="plan-name"
                         id="plan-name"
-                        className="block w-full rounded-sm border-slate-300 focus:border-slate-500 focus:ring-0 sm:text-sm"
+                        className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 text-sm focus:ring-blue-100"
                         placeholder="Name des Plans"
                     />
                 </div>

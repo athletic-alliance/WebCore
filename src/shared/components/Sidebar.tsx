@@ -1,11 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { nanoid } from 'nanoid'
-import jwtDecode from 'jwt-decode'
 import { UserRole } from '../../enums/user-role.enum'
-import { AUTHTOKENKEY, ROLESCHEMAKEY } from '../../constants'
 import { SidebarItem } from './SidebarItem'
 import { SidebarNavItem } from '../../models/sidebar-nav-item'
-import { TokenContext } from '../../context/token.context'
 
 const navigation: SidebarNavItem[] = [
     {
@@ -69,24 +66,27 @@ const navigation: SidebarNavItem[] = [
 ]
 
 export const Sidebar = (): JSX.Element => {
-    const jwt = localStorage.getItem(AUTHTOKENKEY) as string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decodedToken = jwtDecode(jwt) as any
-
-    const roles = useMemo(() => decodedToken[ROLESCHEMAKEY], [decodedToken])
+    // const [roles, setRoles] = useState<string[]>([])
+    //
+    // try {
+    //     const jwt = localStorage.getItem(AUTHTOKENKEY) as string
+    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //     const decodedToken = jwtDecode(jwt) as any
+    //     const userRoles = decodedToken[ROLESCHEMAKEY]
+    //     setRoles(userRoles)
+    // } catch {
+    //     console.error('Error on token')
+    // }
 
     return (
-        // eslint-disable-next-line react/jsx-no-constructed-context-values
-        <TokenContext.Provider value={{ roles }}>
-            <div>
-                <nav>
-                    <ul className="px-5">
-                        {navigation.map((item: SidebarNavItem) => (
-                            <SidebarItem item={item} key={nanoid()} />
-                        ))}
-                    </ul>
-                </nav>
-            </div>
-        </TokenContext.Provider>
+        <div>
+            <nav>
+                <ul className="px-5">
+                    {navigation.map((item: SidebarNavItem) => (
+                        <SidebarItem item={item} key={nanoid()} />
+                    ))}
+                </ul>
+            </nav>
+        </div>
     )
 }

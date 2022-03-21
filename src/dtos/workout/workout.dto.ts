@@ -1,4 +1,5 @@
 import { WorkoutType } from '../../enums/workout-type.enum'
+import { WorkoutRoundExerciseDto } from './workout-round-exercise.dto'
 
 export interface WorkoutDto {
     id: number
@@ -6,5 +7,5 @@ export interface WorkoutDto {
     type: WorkoutType
     timeLimit: number
     description: string
-    exercises: any
+    exercises: WorkoutRoundExerciseDto[]
 }

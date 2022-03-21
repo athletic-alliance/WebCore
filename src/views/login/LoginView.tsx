@@ -29,7 +29,11 @@ export const LoginView = (): JSX.Element => {
                         <div>ALLIANCE</div>
                     </h1>
                 </div>
-                <LoginForm formSubmitted={(e: any) => handleLogin(e)} />
+                <LoginForm
+                    formSubmitted={(credentials: Credentials) =>
+                        handleLogin(credentials)
+                    }
+                />
             </div>
             {hasError && (
                 <div className="mt-5 w-full rounded-sm border border-red-400 bg-red-200 px-4 py-2 text-center text-gray-700 text-sm">

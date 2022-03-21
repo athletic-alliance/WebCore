@@ -39,12 +39,14 @@ export const CreatePlanView = (): JSX.Element => {
         }
     }
 
-    const save = (): void => {}
+    const save = (): void => {
+        console.log('saved it')
+    }
 
     return (
         <div>
             <div>
-                <h1 className="mb-5 text-5xl">Neuen Plan erstellen</h1>
+                <h1 className="mb-5 text-2xl">Neuen Plan erstellen</h1>
                 <div className="flex">
                     <div className="border-r border-gray-200 p-3 pr-10">
                         <WizardProgress

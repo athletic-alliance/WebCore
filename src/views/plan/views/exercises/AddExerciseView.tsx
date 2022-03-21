@@ -30,7 +30,7 @@ export const AddExerciseView = (): JSX.Element => {
 
     return (
         <div>
-            <h1 className="mb-5 text-5xl">Neuen Übung erstellen</h1>
+            <h1 className="mb-5 text-5xl">Neue Übung erstellen</h1>
             <AddExerciseForm formSubmitted={saveExercise} />
         </div>
     )

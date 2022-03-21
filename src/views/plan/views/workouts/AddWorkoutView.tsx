@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import Select, { components, OptionProps } from 'react-select'
+import Select from 'react-select'
 import { nanoid } from 'nanoid'
 import { useMutation } from 'react-query'
 import { XIcon } from '@heroicons/react/outline'
+import { ValueContainer } from 'react-select/animated'
 import { WorkoutType } from '../../../../enums/workout-type.enum'
 import { CreateWorkoutDto } from '../../../../dtos/workout/create-workout.dto'
 import { createWorkout } from '../../../../adapter'
@@ -16,37 +17,9 @@ import {
 } from '../../../../dtos/exercises/exercise.dto'
 import { ExerciseInRoundDto } from '../../../../dtos/exercises/exercise-in-round.dto'
 import { WorkoutRoundDto } from '../../../../dtos/workout/workout-round.dto'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ValueContainer = ({ ...rest }: any): JSX.Element => (
-    <div className="pl-1 text-sm">
-        <components.ValueContainer {...rest} />
-    </div>
-)
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Input = ({ type, ...rest }: any): JSX.Element => (
-    <components.Input className="text-sm" {...rest} />
-)
-
-interface WorkoutTypeOption {
-    value: WorkoutType
-    label: string
-}
-
-const options: WorkoutTypeOption[] = [
-    { value: WorkoutType.EMOM, label: 'EMOM' },
-    { value: WorkoutType.ForTime, label: 'For Time' },
-    { value: WorkoutType.AMRAP, label: 'AMRAP' },
-]
-
-const Option = (props: OptionProps<WorkoutTypeOption>): JSX.Element => {
-    return (
-        <div className="text-sm">
-            <components.Option {...props} />
-        </div>
-    )
-}
+import { WorkoutTypeOption } from '../../../../shared/react-select/WorkoutTypeOption'
+import { Input } from '../../../../shared/react-select/Input'
+import { Option } from '../../../../shared/react-select/Option'
 
 const customStyles = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,7 +37,13 @@ const customStyles = {
     }),
 }
 
-export const AddWorkoutsViews = (): JSX.Element => {
+const options: WorkoutTypeOption[] = [
+    { value: WorkoutType.EMOM, label: 'EMOM' },
+    { value: WorkoutType.ForTime, label: 'For Time' },
+    { value: WorkoutType.AMRAP, label: 'AMRAP' },
+]
+
+export const AddWorkoutViews = (): JSX.Element => {
     const [workoutToSave, setWorkoutToSave] = useState<CreateWorkoutDto>({
         name: 'Workout',
         description: 'Workout',
@@ -195,7 +174,127 @@ export const AddWorkoutsViews = (): JSX.Element => {
                 ) => addExerciseToRound(selectedExercise, details)}
             />
             <div>
-                <div className="md:grid md:grid-cols-3 md:gap-6">
+                <div className="md:grid md:grid-cols-2 md:gap-6">
+                    <div className="md:col-span-1">
+                        <div className="shadow sm:overflow-hidden sm:rounded-md">
+                            <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div className="col-span-3">
+                                        <label
+                                            htmlFor="workout-name"
+                                            className="block font-medium text-gray-700 text-sm"
+                                        >
+                                            Name
+                                        </label>
+                                        <div className="mt-1 flex rounded-md shadow-sm">
+                                            <input
+                                                onChange={(
+                                                    e: React.ChangeEvent<HTMLInputElement>
+                                                ) =>
+                                                    onNameChanged(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                type="text"
+                                                name="workout-name"
+                                                id="workout-name"
+                                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 text-sm focus:ring-blue-100"
+                                                placeholder="Name des Workouts"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div className="col-span-3">
+                                        <label
+                                            htmlFor="workout-timelimit"
+                                            className="block font-medium text-gray-700 text-sm"
+                                        >
+                                            Zeitlimit
+                                        </label>
+                                        <div className="mt-1 flex rounded-md shadow-sm">
+                                            <input
+                                                onChange={(
+                                                    e: React.ChangeEvent<HTMLInputElement>
+                                                ) =>
+                                                    onTimeLimitChanged(
+                                                        +e.target.value
+                                                    )
+                                                }
+                                                type="number"
+                                                name="workout-timelimit"
+                                                id="workout-timelimit"
+                                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 text-sm focus:ring-blue-100"
+                                                placeholder="Zeitlimit"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="type"
+                                        className="block font-medium text-gray-700 text-sm"
+                                    >
+                                        Typ
+                                    </label>
+                                    <div className="mt-1">
+                                        <Select
+                                            styles={customStyles}
+                                            components={{
+                                                ValueContainer,
+                                                Option,
+                                                Input,
+                                            }}
+                                            placeholder="Typ"
+                                            options={options}
+                                            value={selectedWorkoutType}
+                                            onChange={handleWorkoutTypeChanged}
+                                            getOptionLabel={(
+                                                type: WorkoutTypeOption
+                                            ) => type.label}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="description"
+                                        className="block font-medium text-gray-700 text-sm"
+                                    >
+                                        Beschreibung
+                                    </label>
+                                    <div className="mt-1">
+                                        <textarea
+                                            onChange={(
+                                                e: React.ChangeEvent<HTMLTextAreaElement>
+                                            ) =>
+                                                onDescriptionChanged(
+                                                    e.target.value
+                                                )
+                                            }
+                                            id="description"
+                                            name="description"
+                                            rows={3}
+                                            className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
+                                            placeholder="Zusätzliche Informationen zum Workout"
+                                            defaultValue=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                                <button
+                                    onClick={saveWorkout}
+                                    type="submit"
+                                    className="focus:ring-none inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
+                                >
+                                    Speichern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <div className="md:col-span-1">
                         <div className="px-4 sm:px-0">
                             <div>
@@ -282,130 +381,10 @@ export const AddWorkoutsViews = (): JSX.Element => {
                                         })
                                     )
                                 }
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 font-medium text-white shadow-sm text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                className="focus:ring-none inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
                             >
                                 Runde hinzufügen
                             </button>
-                        </div>
-                    </div>
-                    <div className="mt-5 md:col-span-2 md:mt-0">
-                        <div className="shadow sm:overflow-hidden sm:rounded-md">
-                            <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                                <div className="grid grid-cols-3 gap-6">
-                                    <div className="col-span-3 sm:col-span-2">
-                                        <label
-                                            htmlFor="workout-name"
-                                            className="block font-medium text-gray-700 text-sm"
-                                        >
-                                            Name
-                                        </label>
-                                        <div className="mt-1 flex rounded-md shadow-sm">
-                                            <input
-                                                onChange={(
-                                                    e: React.ChangeEvent<HTMLInputElement>
-                                                ) =>
-                                                    onNameChanged(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                type="text"
-                                                name="workout-name"
-                                                id="workout-name"
-                                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
-                                                placeholder="Name des Workouts"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-3 gap-6">
-                                    <div className="col-span-3 sm:col-span-2">
-                                        <label
-                                            htmlFor="workout-timelimit"
-                                            className="block font-medium text-gray-700 text-sm"
-                                        >
-                                            Zeitlimit
-                                        </label>
-                                        <div className="mt-1 flex rounded-md shadow-sm">
-                                            <input
-                                                onChange={(
-                                                    e: React.ChangeEvent<HTMLInputElement>
-                                                ) =>
-                                                    onTimeLimitChanged(
-                                                        +e.target.value
-                                                    )
-                                                }
-                                                type="number"
-                                                name="workout-timelimit"
-                                                id="workout-timelimit"
-                                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
-                                                placeholder="Zeitlimit"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label
-                                        htmlFor="type"
-                                        className="block font-medium text-gray-700 text-sm"
-                                    >
-                                        Typ
-                                    </label>
-                                    <div className="mt-1">
-                                        <Select
-                                            styles={customStyles}
-                                            components={{
-                                                ValueContainer,
-                                                Option,
-                                                Input,
-                                            }}
-                                            placeholder="Typ"
-                                            options={options}
-                                            value={selectedWorkoutType}
-                                            onChange={handleWorkoutTypeChanged}
-                                            getOptionLabel={(
-                                                type: WorkoutTypeOption
-                                            ) => type.label}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label
-                                        htmlFor="description"
-                                        className="block font-medium text-gray-700 text-sm"
-                                    >
-                                        Beschreibung
-                                    </label>
-                                    <div className="mt-1">
-                                        <textarea
-                                            onChange={(
-                                                e: React.ChangeEvent<HTMLTextAreaElement>
-                                            ) =>
-                                                onDescriptionChanged(
-                                                    e.target.value
-                                                )
-                                            }
-                                            id="description"
-                                            name="description"
-                                            rows={3}
-                                            className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
-                                            placeholder="Zusätzliche Informationen zum Workout"
-                                            defaultValue=""
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                                <button
-                                    onClick={saveWorkout}
-                                    type="submit"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                >
-                                    Speichern
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

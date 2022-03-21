@@ -21,7 +21,9 @@ type WorkoutExerciseDetailsProps = {
 export const WorkoutExerciseDetails = ({
     exercise,
 }: WorkoutExerciseDetailsProps): JSX.Element => {
-    const renderDetails = (exerciseDetail: WorkoutExerciseDetail) => {
+    const renderDetails = (
+        exerciseDetail: WorkoutExerciseDetail
+    ): JSX.Element => {
         switch (+ExerciseType[exerciseDetail.type]) {
             case ExerciseType.None:
                 return <span>{exerciseDetail.name}</span>

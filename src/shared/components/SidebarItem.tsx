@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { nanoid } from 'nanoid'
 import {
@@ -6,7 +6,6 @@ import {
     SidebarSubNavItem,
 } from '../../models/sidebar-nav-item'
 import { SidebarSubItem } from './SidebarSubItem'
-import { TokenContext } from '../../context/token.context'
 import { UserRole } from '../../enums/user-role.enum'
 
 type SidebarItemProps = {
@@ -14,16 +13,15 @@ type SidebarItemProps = {
 }
 
 export const SidebarItem = ({ item }: SidebarItemProps): JSX.Element => {
-    const { roles } = useContext(TokenContext)
+    const roles = [UserRole.Athlete, UserRole.Admin, UserRole.Coach]
 
     const itemVisible = (subItem: SidebarSubNavItem): boolean => {
         if (roles.includes(UserRole.Admin)) {
             return true
         }
-        const roleNames = subItem.visibleFor.map((role: UserRole) =>
-            role.toString()
+        return roles.some((roleName: UserRole) =>
+            subItem.visibleFor.includes(roleName)
         )
-        return roleNames.some((roleName: string) => roles.includes(roleName))
     }
 
     return (

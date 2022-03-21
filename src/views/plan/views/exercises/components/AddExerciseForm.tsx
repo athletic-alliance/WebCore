@@ -38,7 +38,6 @@ export const AddExerciseForm = ({
             }}
             validationSchema={NewExerciseSchema}
             onSubmit={(values: CreateExerciseDto) => {
-                console.log('test')
                 formSubmitted(values)
             }}
         >
@@ -55,7 +54,7 @@ export const AddExerciseForm = ({
                             <input
                                 id="name"
                                 type="text"
-                                className="focus:ring-none w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:outline-none"
+                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 text-sm focus:ring-blue-100"
                             />
                         </div>
                         <div>
@@ -68,7 +67,7 @@ export const AddExerciseForm = ({
                             <Field
                                 name="exerciseType"
                                 as="select"
-                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:outline-blue-50 focus:ring-blue-100"
+                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 text-sm focus:ring-blue-100"
                             >
                                 {exerciseTypeOptions.map(
                                     (

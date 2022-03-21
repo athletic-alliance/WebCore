@@ -3,7 +3,6 @@ import React, { ChangeEvent, Fragment, useRef, useState } from 'react'
 import Select, { InputActionMeta } from 'react-select'
 import debounce from 'lodash.debounce'
 import { useQuery } from 'react-query'
-import { SingleValue } from 'react-select/dist/declarations/src/types'
 import { Loader } from '../../../../../shared/components/Loader'
 
 import { fetchExercises } from '../../../../../adapter'
@@ -12,6 +11,8 @@ import {
     ExerciseDto,
 } from '../../../../../dtos/exercises/exercise.dto'
 import { ExerciseType } from '../../../../../enums/exercise-type.enum'
+import { Option } from '../../../../../shared/react-select/Option'
+import { Input } from '../../../../../shared/react-select/Input'
 
 type ModalProps = {
     isOpen: boolean
@@ -20,6 +21,22 @@ type ModalProps = {
         details: ExerciseDetailsDto
     ) => void
     onCancel: () => void
+}
+
+const customStyles = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    control: (base: any, state: any) => ({
+        ...base,
+        boxShadow: 'none',
+        fontSize: '12px',
+        '&:focus-within': {
+            borderColor: 'rgb(37, 99, 235)',
+            boxShadow:
+                'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(219, 234, 254) 0px 0px 0px 1px, rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset',
+            outlineWidth: '3px',
+        },
+        // You can also use state.isFocused to conditionally style based on the focus state
+    }),
 }
 
 export const AddWorkoutExerciseModal = ({
@@ -83,7 +100,7 @@ export const AddWorkoutExerciseModal = ({
                                 type="number"
                                 name="reps"
                                 id="reps"
-                                className="rounded rounded-md border border-gray-300 p-1 focus:outline-none"
+                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                             />
                         </div>
                     </div>
@@ -111,7 +128,7 @@ export const AddWorkoutExerciseModal = ({
                             value={selectedReps}
                             name="reps"
                             id="reps"
-                            className="rounded rounded-md border border-gray-300 p-1 focus:outline-none"
+                            className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                         />
                     </div>
                 </div>
@@ -131,7 +148,7 @@ export const AddWorkoutExerciseModal = ({
                             value={selectedWeight}
                             name="weight"
                             id="weight"
-                            className="rounded rounded-md border border-gray-300 p-1 focus:outline-none"
+                            className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                         />
                     </div>
                 </div>
@@ -159,7 +176,7 @@ export const AddWorkoutExerciseModal = ({
                                 value={selectedDistance}
                                 name="distance"
                                 id="distance"
-                                className="rounded rounded-md border border-gray-300 p-1 focus:outline-none"
+                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 shadow-inner text-sm focus:ring-blue-100"
                             />
                         </div>
                     </div>
@@ -183,10 +200,11 @@ export const AddWorkoutExerciseModal = ({
         }
     }
 
-    const handleExerciseChanged = (
-        selectedItem: SingleValue<ExerciseDto>
-    ): void => {
-        setSelectedExercise(selectedItem)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleExerciseChanged = (option: any | null): void => {
+        if (option) {
+            setSelectedExercise(option)
+        }
     }
 
     const handleExerciseInputValueChanged = (
@@ -241,8 +259,8 @@ export const AddWorkoutExerciseModal = ({
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="inline-block transform rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
-                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div className="min-w-320 inline-block transform rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+                            <div className="rounded rounded-md bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="sm:flex sm:items-start">
                                     <div className="mt-3 w-full text-center sm:mt-0 sm:ml-4 sm:text-left">
                                         <div className="mt-2">
@@ -250,13 +268,17 @@ export const AddWorkoutExerciseModal = ({
                                                 <div className="w-full">
                                                     <label
                                                         htmlFor="name"
-                                                        className="block font-medium text-gray-700 text-sm"
+                                                        className="mb-1 block font-medium text-gray-700 text-sm"
                                                     >
                                                         Übung
                                                     </label>
                                                     {isLoading && <Loader />}
                                                     <Select
-                                                        className="w-full"
+                                                        components={{
+                                                            Option,
+                                                            Input,
+                                                        }}
+                                                        styles={customStyles}
                                                         getOptionLabel={(
                                                             exercise: ExerciseDto
                                                         ) => exercise.name}
@@ -264,8 +286,6 @@ export const AddWorkoutExerciseModal = ({
                                                             exercise: ExerciseDto
                                                         ) => exercise.name}
                                                         options={data}
-                                                        isLoading={isLoading}
-                                                        isClearable
                                                         value={selectedExercise}
                                                         placeholder="Übungen durchsuchen"
                                                         onChange={
@@ -293,14 +313,14 @@ export const AddWorkoutExerciseModal = ({
                             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                 <button
                                     type="button"
-                                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 font-medium text-white shadow-sm text-base hover:bg-green-700 focus:outline-none focus:ring-0 disabled:opacity-25 sm:ml-3 sm:w-auto sm:text-sm"
+                                    className="focus:ring-none ml-1 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
                                     onClick={confirm}
                                 >
                                     Speichern
                                 </button>
                                 <button
                                     type="button"
-                                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 shadow-sm text-base hover:bg-gray-50 focus:outline-none focus:ring-0 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                    className="focus:ring-none  inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
                                     onClick={cancel}
                                     ref={cancelButtonRef}
                                 >

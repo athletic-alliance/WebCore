@@ -4,7 +4,7 @@ import { AddExerciseView } from './views/exercises/AddExerciseView'
 import { ExerciseOverviewView } from './views/exercises/ExerciseOverviewView'
 import { OrganizeDashboardView } from './views/OrganizeDashboardView'
 import { AllWorkoutsViews } from './views/workouts/AllWorkoutsViews'
-import { AddWorkoutsViews } from './views/workouts/AddWorkoutView'
+import { AddWorkoutViews } from './views/workouts/AddWorkoutView'
 import { ShowWorkoutView } from './views/workouts/ShowWorkoutView'
 import { CreatePlanView } from './views/plan/create/CreatePlanView'
 
@@ -30,7 +30,7 @@ export const PlanView = (): JSX.Element => {
                         />
                         <Route
                             path="workout/create"
-                            element={<AddWorkoutsViews />}
+                            element={<AddWorkoutViews />}
                         />
                         <Route
                             path="workout/:workoutId"

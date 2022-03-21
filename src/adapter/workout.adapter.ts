@@ -23,7 +23,7 @@ export const deleteWorkout = async (id: number): Promise<void> => {
 
 export const createWorkout = async (
     createWorkoutDto: CreateWorkoutDto
-): Promise<any> => {
+): Promise<WorkoutDto> => {
     const response = await instance.post('/workout', createWorkoutDto)
     return response.data
 }

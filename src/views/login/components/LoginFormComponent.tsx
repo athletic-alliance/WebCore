@@ -3,6 +3,7 @@ import React from 'react'
 import * as Yup from 'yup'
 import clsx from 'clsx'
 import { Field, Form, Formik, FormikValues } from 'formik'
+import { Credentials } from '../../../dtos/credential.dto'
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -12,7 +13,7 @@ const LoginSchema = Yup.object().shape({
 })
 
 type LoginFormProps = {
-    formSubmitted: (credentials: FormikValues) => void
+    formSubmitted: (credentials: Credentials) => void
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
@@ -33,7 +34,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 password: '',
             }}
             validationSchema={LoginSchema}
-            onSubmit={(values: FormikValues) => {
+            onSubmit={(values: Credentials) => {
                 formSubmitted(values)
             }}
         >
