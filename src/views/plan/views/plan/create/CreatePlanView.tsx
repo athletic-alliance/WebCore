@@ -47,13 +47,14 @@ export const CreatePlanView = (): JSX.Element => {
         <div>
             <div>
                 <h1 className="mb-5 text-2xl">Neuen Plan erstellen</h1>
+
+                <div>
+                    <WizardProgress
+                        currentStep={currentStep}
+                        wizardSteps={wizardSteps}
+                    />
+                </div>
                 <div className="flex">
-                    <div className="border-r border-gray-200 p-3 pr-10">
-                        <WizardProgress
-                            currentStep={currentStep}
-                            wizardSteps={wizardSteps}
-                        />
-                    </div>
                     <div className="mb-5 py-3 px-6">
                         {currentStep === 0 && (
                             <PlanDetailsView
