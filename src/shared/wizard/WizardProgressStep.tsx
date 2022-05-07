@@ -105,7 +105,6 @@ export const WizardProgressStep = ({
                     </div>
                 )}
             </div>
-            <div></div>
         </div>
     )
 }
