@@ -24,7 +24,7 @@ const FinishedIcon = (): JSX.Element => {
 const FirstStep = (currentStep: number): JSX.Element => {
     return (
         <div
-            className={`duration-800 flex h-1 grow items-center transition-all ${
+            className={`duration-800 flex h-1 grow items-center transition-all duration-700 ${
                 currentStep === 0 ? 'bg-gray-200' : 'bg-blue-700'
             }`}
         >
@@ -48,7 +48,7 @@ const LastStep = ({
 }: WizardProgressStepProps): JSX.Element => {
     return (
         <div
-            className={`duration-800 flex h-1 grow items-center transition-all ${
+            className={`duration-800 flex h-1 grow items-center transition-all duration-700 ${
                 currentStepIndex <= stepIndex ? 'bg-gray-200' : 'bg-blue-700'
             }`}
         >
@@ -92,7 +92,7 @@ export const WizardProgressStep = ({
 
     return (
         <div
-            className={`duration-800 flex h-1 grow-[2] items-center transition-all ${
+            className={`duration-800 flex h-1 grow-[2] items-center transition-all duration-700 ${
                 currentStepIndex <= stepIndex ? 'bg-gray-200' : 'bg-blue-700'
             }`}
         >
