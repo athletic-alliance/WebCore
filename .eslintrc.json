@@ -29,7 +29,7 @@
       "error"
     ],
     "@typescript-eslint/no-explicit-any": [
-      "error"
+      "off"
     ],
     "react/jsx-filename-extension": [
       "warn",

@@ -2,6 +2,7 @@ import React from 'react'
 import { useMutation } from 'react-query'
 import { useNavigate } from 'react-router'
 
+import { DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { AddExerciseForm } from './components/AddExerciseForm'
 import { createExercise } from '../../../../adapter'
 import { CreateExerciseDto } from '../../../../dtos/exercises/create-exercise.dto'
@@ -29,9 +30,15 @@ export const AddExerciseView = (): JSX.Element => {
     }
 
     return (
-        <div>
-            <h1 className="mb-5 text-5xl">Neue Übung erstellen</h1>
-            <AddExerciseForm formSubmitted={saveExercise} />
+        <div className="rounded-md bg-white">
+            <div className="flex items-center justify-between rounded-t-lg border border-slate-300 border-b-slate-200 bg-slate-100 p-3">
+                <h1 className="text-md font-light text-slate-800">
+                    Neue Übung erstellen
+                </h1>
+            </div>
+            <div className="p-3 shadow">
+                <AddExerciseForm formSubmitted={saveExercise} />
+            </div>
         </div>
     )
 }

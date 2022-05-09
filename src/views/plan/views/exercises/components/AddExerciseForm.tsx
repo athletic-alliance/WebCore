@@ -2,11 +2,13 @@ import React from 'react'
 import * as Yup from 'yup'
 import { nanoid } from 'nanoid'
 import { Field, Form, Formik } from 'formik'
+import classNames from 'classnames'
+import { DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { ExerciseType } from '../../../../../enums/exercise-type.enum'
 import { CreateExerciseDto } from '../../../../../dtos/exercises/create-exercise.dto'
 
 const NewExerciseSchema = Yup.object().shape({
-    name: Yup.string().required('Name wird benötigt'),
+    name: Yup.string().required('Bitte gib einen Namen ein'),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     exerciseType: Yup.mixed<ExerciseType>().oneOf(Object.values(ExerciseType)),
@@ -41,7 +43,7 @@ export const AddExerciseForm = ({
                 formSubmitted(values)
             }}
         >
-            {({ errors, touched, isValid, dirty }) => (
+            {({ errors }) => (
                 <div className="w-full">
                     <Form className="w-full">
                         <div className="w-full">
@@ -51,11 +53,22 @@ export const AddExerciseForm = ({
                             >
                                 Name
                             </label>
-                            <input
+                            <Field
                                 id="name"
+                                name="name"
                                 type="text"
-                                className="w-full rounded rounded-md border border-gray-300 px-3 py-2 text-slate-900 text-sm focus:ring-blue-100"
+                                className={classNames({
+                                    'w-full rounded rounded-md border px-3 py-2 text-slate-900 text-sm focus:ring-blue-100':
+                                        true,
+                                    'border-red-700': errors.name,
+                                    'border-gray-300': !errors.name,
+                                })}
                             />
+                            {errors.name && (
+                                <div className="p-1 text-red-700 text-sm">
+                                    {errors.name}
+                                </div>
+                            )}
                         </div>
                         <div>
                             <label
@@ -83,13 +96,24 @@ export const AddExerciseForm = ({
                                 )}
                             </Field>
                         </div>
-                        <div className="py-3">
-                            <button
-                                type="submit"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 font-medium text-white shadow-sm text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                Speichern
-                            </button>
+                        <div className="mt-12">
+                            <div className="flex font-light">
+                                <div className="flex p-2 text-sm">
+                                    <div>
+                                        <DocumentDuplicateIcon className="h-6 w-6 text-blue-500" />
+                                    </div>
+                                    <div className="ml-2">
+                                        Als Vorlage speichern
+                                    </div>
+                                </div>
+                                <div className="ml-1 mr-1 w-0 border-l border-slate-400 p-2" />
+                                <button
+                                    type="submit"
+                                    className="mr-2 cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-blue-600 text-sm"
+                                >
+                                    Speichern
+                                </button>
+                            </div>
                         </div>
                     </Form>
                 </div>

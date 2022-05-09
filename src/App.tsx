@@ -28,7 +28,7 @@ const SignedInLayout = (): JSX.Element => {
                             <div className="-mx-4 py-4 px-4 sm:-mx-6 sm:py-4 sm:px-6  lg:mx-0 lg:pl-0 lg:pr-8">
                                 <Sidebar />
                             </div>
-                            <div className="relative col-span-5 bg-white lg:-ml-8 lg:shadow-md">
+                            <div className="relative col-span-5 bg-slate-50 lg:-ml-8 lg:shadow-md">
                                 <div className="relative py-8 px-12 sm:py-12">
                                     <Outlet />
                                 </div>
