@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
 ReactDOM.render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <Toaster />
+            <Toaster toastOptions={{ duration: 30000 }} />
             <App />
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

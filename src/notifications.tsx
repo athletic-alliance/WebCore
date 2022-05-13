@@ -26,7 +26,10 @@ export const notifySuccess = (message: string): string =>
                         </p>
                     </div>
                     <div>
-                        <XCircleIcon className="h-5 w-5 cursor-pointer text-slate-400 hover:text-slate-600" />
+                        <XCircleIcon
+                            className="h-5 w-5 cursor-pointer text-slate-400 hover:text-slate-600"
+                            onClick={() => toast.dismiss(t.id)}
+                        />
                     </div>
                 </div>
             </div>
@@ -51,7 +54,10 @@ export const notifyError = (message: string): string =>
                         </p>
                     </div>
                     <div>
-                        <XCircleIcon className="h-5 w-5 cursor-pointer text-slate-400 hover:text-slate-600" />
+                        <XCircleIcon
+                            className="h-5 w-5 cursor-pointer text-slate-400 hover:text-slate-600"
+                            onClick={() => toast.dismiss(t.id)}
+                        />
                     </div>
                 </div>
             </div>

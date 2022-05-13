@@ -2,7 +2,6 @@ import React from 'react'
 import { useMutation } from 'react-query'
 import { useNavigate } from 'react-router'
 
-import { DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { AddExerciseForm } from './components/AddExerciseForm'
 import { createExercise } from '../../../../adapter'
 import { CreateExerciseDto } from '../../../../dtos/exercises/create-exercise.dto'
