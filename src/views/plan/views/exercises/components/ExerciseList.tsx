@@ -8,6 +8,7 @@ import {
     useTable,
 } from 'react-table'
 import clsx from 'clsx'
+import { TrashIcon } from '@heroicons/react/outline'
 import { deleteExercise } from '../../../../../adapter'
 import { notifyError, notifySuccess } from '../../../../../notifications'
 import { ExerciseDto } from '../../../../../dtos/exercises/exercise.dto'
@@ -41,6 +42,10 @@ const DefaultColumnFilter = ({
 export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
     const queryClient = useQueryClient()
 
+    const onDelete = (selectedFlatRows: any): void => {
+        console.log(selectedFlatRows.map((x: any) => x.original.id))
+    }
+
     const deleteMutation = useMutation((id: number) => deleteExercise(id), {
         onSuccess: () => {
             notifySuccess('Übung gelöscht')
@@ -56,6 +61,10 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
             {
                 Header: 'Übungen',
                 columns: [
+                    {
+                        Header: 'ID',
+                        accessor: 'id',
+                    },
                     {
                         Header: 'Name',
                         accessor: 'name',
@@ -89,7 +98,8 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
         pageCount,
         nextPage,
         previousPage,
-        state: { pageIndex },
+        selectedFlatRows,
+        state: { pageIndex, selectedRowIds },
     } = useTable(
         {
             columns,
@@ -145,10 +155,25 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
 
     return (
         <div className="w-full">
+            <div className="flex items-center justify-between rounded-t-lg border border-slate-300 border-b-slate-300 bg-slate-100 p-3">
+                <h1 className="text-md font-light text-slate-800">
+                    Alle Übungen
+                </h1>
+            </div>
+            <div className="border-x border-slate-300 p-3">
+                <div className="flex">
+                    <div
+                        className="cursor-pointer rounded rounded-md border border-gray-400 bg-white p-2 text-red-700 hover:bg-gray-100 hover:text-red-600"
+                        onClick={() => onDelete(selectedFlatRows)}
+                    >
+                        <TrashIcon className="h-4 w-4" />
+                    </div>
+                </div>
+            </div>
             <div className="flex flex-col">
                 <div className="overflow-x-auto">
-                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                        <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+                    <div className="inline-block min-w-full align-middle">
+                        <div className="border border-slate-300 border-t-transparent shadow">
                             <table
                                 {...getTableProps()}
                                 className="min-w-full divide-y divide-gray-200"
@@ -162,12 +187,9 @@ export const ExerciseList = ({ exercises }: ExerciseListProps): JSX.Element => {
                                                 (column) => (
                                                     <th
                                                         {...column.getHeaderProps()}
-                                                        className="px-6 py-3 text-left font-medium uppercase text-gray-500 text-xs tracking-wider"
+                                                        className="text-left font-medium uppercase text-gray-500 text-xs tracking-wider"
                                                     >
-                                                        {column.render(
-                                                            'Header'
-                                                        )}
-                                                        <div>
+                                                        <div className="p-1 ">
                                                             {column.canFilter
                                                                 ? column.render(
                                                                       'Filter'

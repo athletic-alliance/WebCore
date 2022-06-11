@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { format } from 'date-fns'
 import { Loader } from '../../../shared/components/Loader'
 import { fetchUserPlan } from '../../../adapter'
-import { ShowWorkout } from './workouts/components/ShowWorkout'
+import { ViewWorkout } from './workouts/components/ViewWorkout'
 import { notifyError } from '../../../notifications'
 
 export const OrganizeDashboardView = (): JSX.Element => {
@@ -46,7 +46,7 @@ export const OrganizeDashboardView = (): JSX.Element => {
                                     Workout
                                 </h2>
                                 <div>
-                                    <ShowWorkout
+                                    <ViewWorkout
                                         workout={data.trainingDays[0].workout}
                                     />
                                 </div>

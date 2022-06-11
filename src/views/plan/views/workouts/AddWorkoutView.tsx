@@ -288,7 +288,7 @@ export const AddWorkoutViews = (): JSX.Element => {
                                 <button
                                     onClick={saveWorkout}
                                     type="submit"
-                                    className="focus:ring-none inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
+                                    className="cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-slate-700 text-sm"
                                 >
                                     Speichern
                                 </button>
@@ -357,16 +357,14 @@ export const AddWorkoutViews = (): JSX.Element => {
                                                     )}
                                                 </div>
                                                 <div
-                                                    className="mt-3 flex w-48 cursor-pointer rounded-md p-1 text-sm"
+                                                    className="mt-3 flex w-48 cursor-pointer justify-center rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-slate-700 text-sm"
                                                     onClick={() =>
                                                         setExerciseSelectionModalOpen(
                                                             true
                                                         )
                                                     }
                                                 >
-                                                    <div className="">
-                                                        Übung hinzufügen
-                                                    </div>
+                                                    Übung hinzufügen
                                                 </div>
                                             </div>
                                         </div>
@@ -381,7 +379,7 @@ export const AddWorkoutViews = (): JSX.Element => {
                                         })
                                     )
                                 }
-                                className="focus:ring-none inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
+                                className="cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-slate-700 text-sm"
                             >
                                 Runde hinzufügen
                             </button>

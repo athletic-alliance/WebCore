@@ -18,7 +18,7 @@ export const Navbar = (): JSX.Element => {
     return (
         <Disclosure
             as="header"
-            className="border-b border-gray-200 bg-white shadow-sm"
+            className="z-10 border-b border-gray-200 bg-white shadow-md"
         >
             {({ open }) => (
                 <>

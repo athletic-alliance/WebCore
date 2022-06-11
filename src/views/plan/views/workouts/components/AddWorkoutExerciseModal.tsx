@@ -313,14 +313,14 @@ export const AddWorkoutExerciseModal = ({
                             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                 <button
                                     type="button"
-                                    className="focus:ring-none ml-1 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
+                                    className="cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-slate-700 text-sm"
                                     onClick={confirm}
                                 >
                                     Speichern
                                 </button>
                                 <button
                                     type="button"
-                                    className="focus:ring-none  inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-white shadow-sm text-xs hover:bg-indigo-700 focus:outline-none"
+                                    className="mr-2 cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-slate-700 text-sm"
                                     onClick={cancel}
                                     ref={cancelButtonRef}
                                 >

@@ -14,6 +14,8 @@ export const deleteExercise = async (id: number): Promise<void> => {
     return response.data
 }
 
+export const dleteExercises = async (id: number[]): Promise<void> => {}
+
 export const fetchExercises = async (): Promise<ExerciseDto[]> => {
     const response = await instance.get<ExerciseDto[]>(`/exercise`)
     return response.data

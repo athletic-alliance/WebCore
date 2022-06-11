@@ -109,7 +109,7 @@ export const AddExerciseForm = ({
                                 <div className="ml-1 mr-1 w-0 border-l border-slate-400 p-2" />
                                 <button
                                     type="submit"
-                                    className="mr-2 cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-blue-600 text-sm"
+                                    className="mr-2 cursor-pointer rounded rounded-md border border-blue-300 bg-blue-100 p-2 text-slate-700 text-sm"
                                 >
                                     Speichern
                                 </button>

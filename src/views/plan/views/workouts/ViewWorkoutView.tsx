@@ -4,9 +4,9 @@ import { useParams } from 'react-router'
 
 import { fetchWorkout } from '../../../../adapter'
 import { Loader } from '../../../../shared/components/Loader'
-import { ShowWorkout } from './components/ShowWorkout'
+import { ViewWorkout } from './components/ViewWorkout'
 
-export const ShowWorkoutView = (): JSX.Element => {
+export const ViewWorkoutView = (): JSX.Element => {
     const { workoutId } = useParams()
 
     const { data, isLoading } = useQuery(['fetchWorkout', workoutId], () =>
@@ -17,7 +17,7 @@ export const ShowWorkoutView = (): JSX.Element => {
     return (
         <div className="w-full">
             {isLoading && <Loader />}
-            {data && <ShowWorkout workout={data} />}
+            {data && <ViewWorkout workout={data} />}
         </div>
     )
 }

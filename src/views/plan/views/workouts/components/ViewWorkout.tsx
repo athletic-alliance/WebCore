@@ -3,14 +3,17 @@ import React from 'react'
 import { nanoid } from 'nanoid'
 import { ExerciseType } from '../../../../../enums/exercise-type.enum'
 import { WorkoutDto } from '../../../../../dtos/workout/workout.dto'
-import { WorkoutRoundExerciseDto } from '../../../../../dtos/workout/workout-round-exercise.dto'
+import { ViewWorkoutRoundDto } from '../../../../../dtos/workout/workout-round-exercise.dto'
+import { ViewWorkoutRoundExercisesDto } from '../../../../../dtos/workout/ViewWorkoutRoundExercises'
 
 type ShowWorkoutProps = {
     workout: WorkoutDto
 }
 
-export const ShowWorkout = ({ workout }: ShowWorkoutProps): JSX.Element => {
-    const renderDetails = (exercise: WorkoutRoundExerciseDto): JSX.Element => {
+export const ViewWorkout = ({ workout }: ShowWorkoutProps): JSX.Element => {
+    const renderDetails = (
+        exercise: ViewWorkoutRoundExercisesDto
+    ): JSX.Element => {
         switch (+ExerciseType[exercise.exercise.type]) {
             case ExerciseType.None:
                 return <span>{exercise.exercise.name}</span>
@@ -55,16 +58,24 @@ export const ShowWorkout = ({ workout }: ShowWorkoutProps): JSX.Element => {
                 <div>Timelimit {workout?.timeLimit}</div>
             </div>
             <div className="mt-4 w-full">
-                {workout?.exercises.map(
-                    (exercise: WorkoutRoundExerciseDto, index: number) => (
+                {workout?.rounds.map(
+                    (round: ViewWorkoutRoundDto, index: number) => (
                         <div
                             key={nanoid()}
-                            className="mb-2 w-full rounded-md border border-gray-200 p-3"
+                            className="mb-2 w-full rounded-md border border-gray-200 bg-white p-3 shadow shadow-sm"
                         >
                             <div className="mb-1 font-bold">
                                 Runde {index + 1}
                             </div>
-                            {renderDetails(exercise)}
+                            {round.exercises.map(
+                                (ex: ViewWorkoutRoundExercisesDto) => {
+                                    return (
+                                        <div className="pl-1" key={nanoid()}>
+                                            {renderDetails(ex)}
+                                        </div>
+                                    )
+                                }
+                            )}
                         </div>
                     )
                 )}
